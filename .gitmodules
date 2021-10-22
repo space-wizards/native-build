@@ -7,3 +7,7 @@
 [submodule "glfw"]
 	path = glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "fluidsynth"]
+	path = fluidsynth
+	url = https://github.com/FluidSynth/fluidsynth.git
+
