@@ -20,3 +20,15 @@ cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j $(nproc)
 popd
+
+# Build FluidSynth
+pushd fluidsynth
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release \
+-Denable-aufile=OFF -Denable-dbus=OFF -Denable-ipv6=OFF -Denable-jack=OFF -Denable-ladspa=OFF \
+-Denable-libsndfile=OFF -Denable-midishare=OFF -Denable-network=OFF -Denable-oss=OFF -Denable-sdl2=OFF -Denable-pulseaudio=OFF -Denable-readline=OFF \
+-Denable-lash=OFF
+make -j $(nproc)
+popd
+
