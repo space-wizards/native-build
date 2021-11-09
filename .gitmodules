@@ -1,6 +1,6 @@
 [submodule "freetype"]
 	path = freetype
-	url = git@github.com:space-wizards/freetype.git
+	url = https://github.com/space-wizards/freetype.git
 [submodule "openal-soft"]
 	path = openal-soft
 	url = https://github.com/kcat/openal-soft.git
