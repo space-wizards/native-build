@@ -11,3 +11,6 @@
 	path = fluidsynth
 	url = https://github.com/FluidSynth/fluidsynth.git
 
+[submodule "glib"]
+	path = glib
+	url = https://github.com/GNOME/glib
