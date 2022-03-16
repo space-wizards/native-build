@@ -14,3 +14,6 @@
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg.git
+[submodule "zstd"]
+	path = zstd
+	url = https://github.com/facebook/zstd.git
