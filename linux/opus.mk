@@ -1,12 +1,13 @@
-# DOORSTUCK
-include opus/opus_sources.mk
-include opus/opus_headers.mk
-include opus/silk_sources.mk
-include opus/silk_headers.mk
-include opus/celt_sources.mk
-include opus/celt_headers.mk
+# Opus makefile using Zig to compile for Linux, Windows & Mac OS X
 
-OPUS_PFX := opus/
+include ../opus/opus_sources.mk
+include ../opus/opus_headers.mk
+include ../opus/silk_sources.mk
+include ../opus/silk_headers.mk
+include ../opus/celt_sources.mk
+include ../opus/celt_headers.mk
+
+OPUS_PFX := ../opus/
 
 ALL_SOURCES := $(OPUS_SOURCES) $(OPUS_SOURCES_FLOAT)
 ALL_SOURCES += $(CELT_SOURCES) $(CELT_SOURCES_SSE) $(CELT_SOURCES_SSE2)
@@ -29,14 +30,16 @@ OPUS_CFLAGS += -fvisibility=hidden
 # note the delayed evaluation
 OPUS_LDFLAGS = -shared -o $@
 
-all: builds/libopus.so builds/libopus.dll builds/libopus.dylib
+all: build/opus/libopus.so.0 build/opus/libopus.dll build/opus/libopus.dylib
 
-builds/libopus.so: $(ALL_SOURCES_PFX) $(ALL_HEADERS_PFX)
+.PHONY: build/opus/libopus.so.0 build/opus/libopus.dll build/opus/libopus.dylib
+
+build/opus/libopus.so.0: $(ALL_SOURCES_PFX) $(ALL_HEADERS_PFX)
 	zig cc -target x86_64-linux-gnu $(OPUS_CFLAGS) $(ALL_SOURCES_PFX) $(OPUS_LDFLAGS)
 
-builds/libopus.dll: $(ALL_SOURCES_PFX) $(ALL_HEADERS_PFX)
+build/opus/libopus.dll: $(ALL_SOURCES_PFX) $(ALL_HEADERS_PFX)
 	zig cc -target x86_64-windows-gnu $(OPUS_CFLAGS) $(ALL_SOURCES_PFX) $(OPUS_LDFLAGS)
 
-builds/libopus.dylib: $(ALL_SOURCES_PFX) $(ALL_HEADERS_PFX)
+build/opus/libopus.dylib: $(ALL_SOURCES_PFX) $(ALL_HEADERS_PFX)
 	zig cc -target x86_64-macos-gnu $(OPUS_CFLAGS) $(ALL_SOURCES_PFX) $(OPUS_LDFLAGS)
 
