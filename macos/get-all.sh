@@ -84,7 +84,6 @@ pushd ../builds
 
     brewgrab freetype 2.10.1 lib/libfreetype.6.dylib
     brewgrab glfw 3.3.2 lib/libglfw.3.dylib
-    brewgrab libsodium 1.0.18 lib/libsodium.dylib 
 
     # other archs are using 2.1.0 of fluidsynth but that patchlevel does not exist on brew
     brewgrab fluid-synth 2.1.8 lib/libfluidsynth.2.dylib fluidsynth
