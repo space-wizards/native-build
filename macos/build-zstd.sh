@@ -1,11 +1,26 @@
 #!/bin/bash
 
-mkdir build/
-mkdir build/zstd
+VERSION=1.5.2
+PLATFORM=osx-`uname -m`
+LIBRARY_NAME=zstd
+LIBRARY_FILE=lib/libzstd.dylib
 
-pushd build/zstd
 
-cmake ../../../zstd/build/cmake \
+# /-- boilerplate --\
+ANSI_GREEN='\033[0;32m'
+ANSI_RESET='\033[0m'
+
+INPUT_DIR=../$LIBRARY_NAME
+BUILD_DIR=build/$LIBRARY_NAME
+OUTPUT_DIR=../builds/$LIBRARY_NAME/$VERSION/$PLATFORM
+
+set -e 
+# \-- boilerplate --/
+
+
+# Actually do the build
+
+cmake -S $INPUT_DIR/build/cmake -B $BUILD_DIR \
     -DZSTD_BUILD_SHARED=ON \
     -DZSTD_BUILD_STATIC=OFF \
     -DZSTD_BUILD_PROGRAMS=OFF \
@@ -15,13 +30,13 @@ cmake ../../../zstd/build/cmake \
     -DZSTD_LEGACY_SUPPORT=OFF \
     -DCMAKE_BUILD_TYPE=Release
 
-# I don't know how to do nproc on mac and this 10 year old iMac has 4 cores so have fun.
-make -j 4
-
+pushd $BUILD_DIR
+make -j `sysctl -n hw.logicalcpu`
 popd
 
-mkdir ../builds
-mkdir ../builds/zstd
-mkdir ../builds/zstd/osx-x64
-cp build/zstd/lib/libzstd.dylib ../builds/zstd/osx-x64/libzstd.dylib
 
+# /-- boilerplate --\
+mkdir -p $OUTPUT_DIR
+cp $BUILD_DIR/$LIBRARY_FILE $OUTPUT_DIR/
+echo -e $ANSI_GREEN"Library file obtained: " `ls $OUTPUT_DIR` $ANSI_RESET
+# \-- boilerplate --/
