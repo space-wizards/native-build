@@ -17,3 +17,6 @@
 [submodule "zstd"]
 	path = zstd
 	url = https://github.com/facebook/zstd.git
+[submodule "SDL"]
+	path = SDL
+	url = https://github.com/libsdl-org/SDL.git
