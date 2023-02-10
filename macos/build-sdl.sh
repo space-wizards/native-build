@@ -10,7 +10,7 @@ mkdir "x64"
 
 (
     # ARM64 build
-    cmake -S ../../../sdl/ -B arm64       \
+    cmake -S ../../../SDL/ -B arm64       \
         -DCMAKE_BUILD_TYPE=Release        \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=11  \
         -DCMAKE_OSX_ARCHITECTURES=arm64   \
@@ -23,7 +23,7 @@ mkdir "x64"
 
 (
     # x64 build
-    cmake -S ../../../sdl/ -B x64           \
+    cmake -S ../../../SDL/ -B x64           \
         -DCMAKE_BUILD_TYPE=Release          \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15 \
         -DCMAKE_OSX_ARCHITECTURES=x86_64    \
