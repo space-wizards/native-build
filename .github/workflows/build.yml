@@ -44,4 +44,26 @@ jobs:
           name: win-arm64
           path: builds/win-arm64/*.dll
 
-  #linux-x64:
+  linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: bootstrap vcpkg
+        run: ./vcpkg/bootstrap-vcpkg.sh
+
+      - name: create build container
+        run: |
+          cd linux
+          ./build-build-env.sh
+
+      - name: build vcpkg packages
+        run: ./linux/build-vcpkg.sh x64-linux-dynamic linux-x64
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: linux-x64
+          path: builds/linux-x64/*.so*
