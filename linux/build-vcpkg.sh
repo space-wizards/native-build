@@ -7,8 +7,8 @@ docker run --rm -v "$(pwd)/..:/opt" ss14-native-build:1.0 /opt/vcpkg/vcpkg insta
 
 TO_COPY=("libSDL2-2.0.so.0" "libfreetype.so.6" "libglfw.so.3" "libopenal.so.1")
 
-mkdir -p "builds/$RID"
+mkdir -p "../builds/$RID"
 
 for native in ${TO_COPY[@]}; do
-  cp "vcpkg/installed/$TRIPLET/lib/$native" "builds/$RID/$native"
+  cp "../vcpkg/installed/$TRIPLET/lib/$native" "../builds/$RID/$native"
 done
