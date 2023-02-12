@@ -1,0 +1,47 @@
+name: Build Natives
+on:
+  # Manual dispatch.
+  workflow_dispatch:
+
+jobs:
+  #osx-x64:
+  #osx-arm64:
+  win-x64:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: bootstrap vcpkg
+        run: ./vcpkg/bootstrap-vcpkg.bat
+
+      - name: build vcpkg packages
+        run: ./windows/build-vcpkg.ps1 x64-windows win-x46
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: win-x64
+          path: builds/win-x64/*.dll
+
+  win-arm64:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: bootstrap vcpkg
+        run: ./vcpkg/bootstrap-vcpkg.bat
+
+      - name: build vcpkg packages
+        run: ./windows/build-vcpkg.ps1 arm64-windows win-arm64
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: win-arm64
+          path: builds/win-arm64/*.dll
+
+  #linux-x64:
