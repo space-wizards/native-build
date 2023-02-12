@@ -63,7 +63,7 @@ jobs:
       - name: build vcpkg packages
         run: |
           cd linux
-          ./linux/build-vcpkg.sh x64-linux-dynamic linux-x64
+          ./build-vcpkg.sh x64-linux-dynamic linux-x64
 
       - uses: actions/upload-artifact@v3
         with:
