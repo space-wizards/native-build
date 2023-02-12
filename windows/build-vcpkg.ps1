@@ -12,7 +12,7 @@ Push-Location $(Join-Path $PSScriptRoot "..")
 
 vcpkg\vcpkg.exe install --triplet $triplet "sdl2[vulkan]" "openal-soft" "freetype[core]" "glfw3"
 
-$files_to_copy = @("glfw3.dll", "SDL2.dll", "OpenAL32.dll", "freetype.dll", "libfluidsynth-3.dll", "glib-2.0-0.dll", "iconv-2.dll", "intl-8.dll", "pcre2-8.dll")
+$files_to_copy = @("glfw3.dll", "SDL2.dll", "OpenAL32.dll", "freetype.dll")
 New-Item -ItemType Directory -Force "builds"
 New-Item -ItemType Directory -Force "builds\$rid"
 
