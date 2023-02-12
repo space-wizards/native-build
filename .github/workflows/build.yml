@@ -61,7 +61,9 @@ jobs:
           ./build-build-env.sh
 
       - name: build vcpkg packages
-        run: ./linux/build-vcpkg.sh x64-linux-dynamic linux-x64
+        run: |
+          cd linux
+          ./linux/build-vcpkg.sh x64-linux-dynamic linux-x64
 
       - uses: actions/upload-artifact@v3
         with:
