@@ -1,5 +1,6 @@
 #!/bin/bash python3
 
+import platform
 import subprocess
 import shutil
 from common import Software, Github
@@ -21,19 +22,29 @@ class SDL(Software):
     def build(self) -> None:
         cmake = shutil.which("cmake")
 
+        cmake_args = [
+            cmake,
+            f"-B{self.dest_dir}",
+            "-GNinja",
+            "-DSDL_SHARED=On",
+            "-DSDL_STATIC=Off",
+            "-DSDL_WERROR=Off",
+            "-DSDL_TESTS=Off",
+            "-DSDL_INSTALL_TESTS=Off",
+            "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
+        ]
+
+        if platform.system() == "Darwin":
+            cmake_args.extend(
+                [
+                    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11",
+                    "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64",
+                ]
+            )
+
         Github.log("Setting up CMake...")
         result = subprocess.call(
-            [
-                cmake,
-                f"-B{self.dest_dir}",
-                "-GNinja",
-                "-DSDL_SHARED=On",
-                "-DSDL_STATIC=Off",
-                "-DSDL_WERROR=Off",
-                "-DSDL_TESTS=Off",
-                "-DSDL_INSTALL_TESTS=Off",
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-            ],
+            cmake_args,
             text=True,
             cwd=self.source_dir,
         )
