@@ -5,9 +5,10 @@ from software.sdl import SDL
 from software.openal import OpenAL
 from software.fluidsynth import Fluidsynth
 
-from common import Github, Software, dump_build_notes, ARTIFACT_DIR
+from common import Github, Software, dump_build_notes, ARTIFACT_DIR, Platform
 
 from pathlib import Path
+import subprocess
 
 if __name__ == "__main__":
     to_build: list[Software] = [
@@ -21,6 +22,23 @@ if __name__ == "__main__":
     for build in to_build:
         with Github.LogGroup(f"Building {build.name}"):
             build.build()
+
+            # Strip debug information out per build's outputs
+            new_outputs = []
+            for output_name in build.outputs[Platform.Linux]:
+                Github.log(f"Moving debug information for {output_name}")
+                debug_name = f"{output_name}.debug"
+                subprocess.call(
+                    [
+                        "objcopy",
+                        "--only-keep-debug",
+                        str(build.dest_dir.joinpath(output_name)),
+                        str(build.dest_dir.joinpath(debug_name)),
+                    ]
+                )
+                new_outputs.append(debug_name)
+            build.outputs[Platform.Linux].extend(new_outputs)
+
             build.publish()
 
     dump_build_notes(
