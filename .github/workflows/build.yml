@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  osx-arm64:
-    runs-on: macos-15
+  osx-x64:
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,7 +20,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: osx-arm64
+          name: osx-x64
           path: artifacts
           if-no-files-found: error
 
