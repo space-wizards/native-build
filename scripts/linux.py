@@ -3,7 +3,6 @@ from software.zstd import ZStd
 from software.glfw import GLFW
 from software.sdl import SDL
 from software.openal import OpenAL
-from software.freetype import Freetype
 from software.fluidsynth import Fluidsynth
 
 from common import Github, Software, dump_build_notes, ARTIFACT_DIR
@@ -16,7 +15,6 @@ if __name__ == "__main__":
         GLFW(),
         SDL(),
         OpenAL(),
-        Freetype(),
         Fluidsynth(),
     ]
 
