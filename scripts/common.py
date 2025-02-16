@@ -101,6 +101,11 @@ class Software:
             shutil.rmtree(self.dest_dir)
         self.dest_dir.mkdir(exist_ok=True, parents=True)
 
+        self.publish_dir = ARTIFACT_DIR.joinpath(self.name)
+        if self.publish_dir.exists():
+            shutil.rmtree(self.publish_dir)
+        self.publish_dir.mkdir(exist_ok=True, parents=True)
+
         self.outputs: dict[str, list[str]] = []
         self.tools: dict[str, Path] = {}
 
@@ -109,11 +114,6 @@ class Software:
         pass
 
     def publish(self) -> None:
-        publish_dir = ARTIFACT_DIR.joinpath(self.name)
-        if publish_dir.exists():
-            shutil.rmtree(publish_dir)
-        publish_dir.mkdir(exist_ok=True, parents=True)
-
         os = Platform.get()
         if os not in self.outputs.keys():
             Github.bail(f"Unknown platform {os}, unable to handle outputs")
@@ -128,13 +128,13 @@ class Software:
 
             # Since output_path might have changed (due to symlinks), re-use the expected
             # output name here
-            new_path = publish_dir.joinpath(Path(output).name)
+            new_path = self.publish_dir.joinpath(Path(output).name)
             Github.log(f"[{output_path}] => [{new_path}]")
             output_path.rename(new_path)
 
         dump_build_notes(
             self.name,
             self.source_dir,
-            publish_dir.joinpath("notes.md"),
+            self.publish_dir.joinpath("notes.md"),
             [f"- {self.dest_dir.joinpath(output).name}" for output in self.outputs[os]],
         )
