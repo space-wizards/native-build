@@ -3,7 +3,7 @@
 import platform
 import subprocess
 import shutil
-from common import Software, Github
+from common import Software, Github, Platform
 
 
 class SDL(Software):
@@ -11,12 +11,12 @@ class SDL(Software):
         super().__init__("SDL", "SDL")
 
         self.outputs = {
-            "Windows": [
+            Platform.Windows: [
                 "SDL2.dll",
                 "SDL2.pdb",
             ],
-            "Linux": ["libSDL2-2.0.so"],
-            "Darwin": ["libSDL2-2.0.dylib"],
+            Platform.Linux: ["libSDL2-2.0.so"],
+            Platform.OSX: ["libSDL2-2.0.dylib"],
         }
 
     def build(self) -> None:
@@ -34,7 +34,7 @@ class SDL(Software):
             "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
         ]
 
-        if platform.system() == "Darwin":
+        if platform.system() == Platform.OSX:
             cmake_args.extend(
                 [
                     "-DCMAKE_OSX_DEPLOYMENT_TARGET=11",

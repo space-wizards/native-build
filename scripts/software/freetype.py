@@ -2,7 +2,7 @@
 
 import subprocess
 import shutil
-from common import Software, Github
+from common import Software, Github, Platform
 
 
 class Freetype(Software):
@@ -10,12 +10,12 @@ class Freetype(Software):
         super().__init__("Freetype", "freetype")
 
         self.outputs = {
-            "Windows": [
+            Platform.Windows: [
                 "freetype.dll",
                 "freetype.pdb",
             ],
-            "Linux": ["libfreetype.so"],
-            "Darwin": ["libfreetype.dylib"],
+            Platform.Linux: ["libfreetype.so"],
+            Platform.OSX: ["libfreetype.dylib"],
         }
 
     def build(self) -> None:
