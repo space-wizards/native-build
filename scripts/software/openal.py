@@ -2,7 +2,7 @@
 
 import subprocess
 import shutil
-from common import Software, Github
+from common import Software, Github, Platform
 
 
 class OpenAL(Software):
@@ -10,12 +10,12 @@ class OpenAL(Software):
         super().__init__("OpenAL-Soft", "openal-soft")
 
         self.outputs = {
-            "Windows": [
+            Platform.Windows: [
                 "OpenAL32.dll",
                 "OpenAL32.pdb",
             ],
-            "Linux": ["libopenal.so"],
-            "Darwin": ["libopenal.dylib"],
+            Platform.Linux: ["libopenal.so"],
+            Platform.OSX: ["libopenal.dylib"],
         }
 
     def build(self) -> None:

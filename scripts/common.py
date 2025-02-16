@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from pathlib import Path
-import platform
+from enum import Enum
+import platform as _platform  # Python gets confused with similar names here
 import shutil
 import subprocess
 import sys
@@ -9,6 +10,24 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT_DIR = SCRIPT_DIR.parent
 BUILD_DIR = ROOT_DIR.joinpath("build")
 ARTIFACT_DIR = ROOT_DIR.joinpath("artifacts")
+
+
+class Platform(Enum):
+    Windows = (1,)
+    Linux = (2,)
+    OSX = (3,)
+
+    @staticmethod
+    def get() -> "Platform":
+        platform = _platform.system()
+        if platform == "Windows":
+            return Platform.Windows
+        elif platform == "Linux":
+            return Platform.Linux
+        elif platform == "Darwin":
+            return Platform.OSX
+        else:
+            raise RuntimeError(f"Unknown platform {platform}")
 
 
 class Github:
@@ -95,7 +114,7 @@ class Software:
             shutil.rmtree(publish_dir)
         publish_dir.mkdir(exist_ok=True, parents=True)
 
-        os = platform.system()
+        os = Platform.get()
         if os not in self.outputs.keys():
             Github.bail(f"Unknown platform {os}, unable to handle outputs")
 

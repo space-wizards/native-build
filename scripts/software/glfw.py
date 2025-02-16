@@ -2,7 +2,7 @@
 
 import subprocess
 import shutil
-from common import Software, Github
+from common import Software, Github, Platform
 
 
 class GLFW(Software):
@@ -10,12 +10,12 @@ class GLFW(Software):
         super().__init__("GLFW", "glfw")
 
         self.outputs = {
-            "Windows": [
+            Platform.Windows: [
                 "src/glfw3.dll",
                 "src/glfw3.pdb",
             ],
-            "Linux": ["src/libglfw.so"],
-            "Darwin": ["src/libglfw.dylib"],
+            Platform.Linux: ["src/libglfw.so"],
+            Platform.OSX: ["src/libglfw.dylib"],
         }
 
     def build(self) -> None:

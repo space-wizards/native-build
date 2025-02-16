@@ -2,7 +2,7 @@
 
 import subprocess
 import shutil
-from common import Software, Github
+from common import Software, Github, Platform
 
 
 class ZStd(Software):
@@ -10,12 +10,12 @@ class ZStd(Software):
         super().__init__("zstd", "zstd")
 
         self.outputs = {
-            "Windows": [
+            Platform.Windows: [
                 "lib/zstd.dll",
                 "lib/zstd.pdb",
             ],
-            "Linux": ["lib/libzstd.so"],
-            "Darwin": ["lib/libzstd.dylib"],
+            Platform.Linux: ["lib/libzstd.so"],
+            Platform.OSX: ["lib/libzstd.dylib"],
         }
 
     def build(self) -> None:

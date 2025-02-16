@@ -2,7 +2,7 @@
 
 import subprocess
 import shutil
-from common import Software, Github
+from common import Software, Github, Platform
 
 
 class Fluidsynth(Software):
@@ -10,9 +10,9 @@ class Fluidsynth(Software):
         super().__init__("Fluidsynth", "fluidsynth")
 
         self.outputs = {
-            "Windows": [],
-            "Linux": ["src/libfluidsynth.so"],
-            "Darwin": ["src/FluidSynth.framework"],
+            Platform.Windows: [],
+            Platform.Linux: ["src/libfluidsynth.so"],
+            Platform.OSX: ["src/FluidSynth.framework"],
         }
 
     def build(self) -> None:
