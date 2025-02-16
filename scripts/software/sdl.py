@@ -1,6 +1,5 @@
 #!/bin/bash python3
 
-import platform
 import subprocess
 import shutil
 from common import Software, Github, Platform
@@ -33,14 +32,6 @@ class SDL(Software):
             "-DSDL_INSTALL_TESTS=Off",
             "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
         ]
-
-        if platform.system() == Platform.OSX:
-            cmake_args.extend(
-                [
-                    "-DCMAKE_OSX_DEPLOYMENT_TARGET=11",
-                    "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64",
-                ]
-            )
 
         Github.log("Setting up CMake...")
         result = subprocess.call(
