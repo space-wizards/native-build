@@ -61,6 +61,12 @@ jobs:
         shell: cmd
         run: choco install ninja --limit-output --no-progress
 
+      - name: Install VCPkg dependencies
+        uses: lukka/run-vcpkg@v11
+        with:
+          runVcpkgInstall: true
+          vcpkgJsonGlob: 'vcpkg.json'
+
       - name: Build
         shell: cmd
         run: |
