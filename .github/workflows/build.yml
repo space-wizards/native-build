@@ -25,18 +25,23 @@ jobs:
           if-no-files-found: error
 
   linux-x64:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: Install Deps
-        run: sudo apt install -y --no-install-recommends ninja-build libwayland-dev libxkbcommon-dev xorg-dev libgtk-4-dev
+      - uses: docker/build-push-action@v2
+        with:
+          tags: native-build:latest
+          file: scripts/linux-build-env.Dockerfile
+          push: false
 
-      - name: Build
-        run: python ./scripts/linux.py
+      - uses: addnab/docker-run-action@v3
+        with:
+          image: native-build:latest
+          run: python ./scripts/linux.py
 
       - uses: actions/upload-artifact@v4
         with:
