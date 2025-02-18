@@ -41,7 +41,8 @@ jobs:
       - uses: addnab/docker-run-action@v3
         with:
           image: native-build:latest
-          run: python ./scripts/linux.py
+          run: python /work/scripts/linux.py
+          options: -v ${{ github.workspace }}:/work
 
       - uses: actions/upload-artifact@v4
         with:
