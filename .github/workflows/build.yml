@@ -52,6 +52,10 @@ jobs:
 
   win-x64:
     runs-on: windows-2022
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows-release
+      VCPKG_DEFAULT_HOST_TRIPLET: x64-windows-release
+
     steps:
       - uses: actions/checkout@v3
         with:
