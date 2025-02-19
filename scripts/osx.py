@@ -6,9 +6,7 @@ from software.openal import OpenAL
 from software.freetype import Freetype
 from software.fluidsynth import Fluidsynth
 
-from common import Github, Software, dump_build_notes, ARTIFACT_DIR
-
-from pathlib import Path
+from common import Github, Software, dump_build_notes, ARTIFACT_DIR, ROOT_DIR
 
 if __name__ == "__main__":
     to_build: list[Software] = [
@@ -27,7 +25,7 @@ if __name__ == "__main__":
 
     dump_build_notes(
         "native-build (OSX x64)",
-        Path("."),
+        ROOT_DIR,
         ARTIFACT_DIR.joinpath("notes.md"),
         [f"- {build.name}" for build in to_build],
     )

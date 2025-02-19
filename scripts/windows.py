@@ -8,8 +8,6 @@ from software.freetype import Freetype
 
 from common import Github, Software, dump_build_notes, ARTIFACT_DIR, ROOT_DIR
 
-from pathlib import Path
-
 if __name__ == "__main__":
     to_build: list[Software] = [
         Fluidsynth(),
@@ -32,7 +30,7 @@ if __name__ == "__main__":
 
     dump_build_notes(
         "native-build (Windows x64)",
-        Path("."),
+        ROOT_DIR,
         ARTIFACT_DIR.joinpath("notes.md"),
         [f"- {build.name}" for build in to_build],
     )
