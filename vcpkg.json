@@ -1,6 +1,9 @@
 {
   "dependencies": [
-    "glib",
+    {
+      "name": "glib",
+      "version>=": "2.80.0"
+    },
     "pkgconf"
   ]
 }
