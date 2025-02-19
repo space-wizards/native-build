@@ -17,3 +17,5 @@ ENV PATH="$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH"
 RUN pyenv install 3.11
 RUN pyenv global 3.11
 
+# Remove dubious ownership check from git
+RUN git config --global --add safe.directory '*'
