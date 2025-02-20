@@ -43,7 +43,7 @@ class Fluidsynth(Software):
         generation_env = os.environ.copy()
 
         if Platform.get() == Platform.Windows:
-            vc_install_dir = ROOT_DIR.joinpath("vcpkg_installed/x64-windows")
+            vc_install_dir = ROOT_DIR.joinpath("vcpkg_installed/x64-windows-release")
             tools_directories = [
                 str(vc_install_dir.joinpath("tools/pkgconf")),
                 str(vc_install_dir.joinpath("lib")),
