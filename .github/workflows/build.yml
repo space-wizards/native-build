@@ -55,6 +55,7 @@ jobs:
     env:
       VCPKG_DEFAULT_TRIPLET: x64-windows-release
       VCPKG_DEFAULT_HOST_TRIPLET: x64-windows-release
+      VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
 
     steps:
       - uses: actions/checkout@v3
