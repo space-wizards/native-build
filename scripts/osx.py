@@ -1,4 +1,5 @@
-#!/bin/bash python3
+#!/usr/bin/env python3
+
 from software.zstd import ZStd
 from software.glfw import GLFW
 from software.sdl import SDL
