@@ -3,6 +3,7 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
+from common.cmake import cmake_common_args
 
 
 class SDL(Software):
@@ -11,11 +12,11 @@ class SDL(Software):
 
         self.outputs = {
             Platform.Windows: [
-                "SDL2.dll",
-                "SDL2.pdb",
+                "SDL3.dll",
+                "SDL3.pdb",
             ],
-            Platform.Linux: ["libSDL2-2.0.so"],
-            Platform.OSX: ["libSDL2-2.0.dylib"],
+            Platform.Linux: ["libSDL3.0.so"],
+            Platform.OSX: ["libSDL3.dylib"],
         }
 
     def build(self) -> None:
@@ -24,14 +25,12 @@ class SDL(Software):
         cmake_args = [
             cmake,
             f"-B{self.dest_dir}",
-            "-GNinja",
             "-DSDL_SHARED=On",
             "-DSDL_STATIC=Off",
             "-DSDL_WERROR=Off",
             "-DSDL_TESTS=Off",
             "-DSDL_INSTALL_TESTS=Off",
-            "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-        ]
+        ] + cmake_common_args()
 
         Github.log("Setting up CMake...")
         result = subprocess.call(

@@ -13,7 +13,7 @@ class Fluidsynth(Software):
         self.outputs = {
             Platform.Windows: ["src/fluidsynth.lib", "src/fluidsynth.pdb"],
             Platform.Linux: ["src/libfluidsynth.so"],
-            Platform.OSX: ["src/FluidSynth.framework"],
+            Platform.OSX: ["src/libfluidsynth.3.dylib"],
         }
 
     def build(self) -> None:
@@ -37,6 +37,7 @@ class Fluidsynth(Software):
             "-Denable-pulseaudio=OFF",
             "-Denable-readline=OFF",
             "-Denable-lash=OFF",
+            "-Denable-framework=OFF",
             "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
         ]
 

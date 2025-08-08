@@ -30,13 +30,14 @@ if __name__ == "__main__":
             for output_name in build.outputs[Platform.Linux]:
                 Github.log(f"Moving debug information for {output_name}")
                 debug_name = f"{output_name}.debug"
-                subprocess.call(
+                subprocess.run(
                     [
                         "objcopy",
                         "--only-keep-debug",
                         str(build.dest_dir.joinpath(output_name)),
                         str(build.dest_dir.joinpath(debug_name)),
-                    ]
+                    ],
+                    check=True
                 )
                 new_outputs.append(debug_name)
             build.outputs[Platform.Linux].extend(new_outputs)

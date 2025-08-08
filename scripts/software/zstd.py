@@ -3,6 +3,7 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
+from common.cmake import cmake_common_args
 
 
 class ZStd(Software):
@@ -27,7 +28,6 @@ class ZStd(Software):
                 cmake,
                 "build/cmake",
                 f"-B{self.dest_dir}",
-                "-GNinja",
                 "-DZSTD_BUILD_SHARED=ON",
                 "-DZSTD_BUILD_STATIC=OFF",
                 "-DZSTD_BUILD_PROGRAMS=OFF",
@@ -35,8 +35,7 @@ class ZStd(Software):
                 "-DZSTD_MULTITHREAD_SUPPORT=ON",
                 "-DZSTD_BUILD_CONTRIB=OFF",
                 "-DZSTD_LEGACY_SUPPORT=OFF",
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-            ],
+            ] + cmake_common_args(),
             text=True,
             cwd=self.source_dir,
         )

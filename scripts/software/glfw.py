@@ -3,6 +3,7 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
+from common.cmake import cmake_common_args
 
 
 class GLFW(Software):
@@ -26,14 +27,12 @@ class GLFW(Software):
             [
                 cmake,
                 f"-B{self.dest_dir}",
-                "-GNinja",
                 "-DBUILD_SHARED_LIBS=On",
                 "-DGLFW_BUILD_EXAMPLES=Off",
                 "-DGLFW_BUILD_TESTS=Off",
                 "-DGLFW_BUILD_DOCS=Off",
                 "-DGLFW_INSTALL=Off",
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-            ],
+            ] + cmake_common_args(),
             text=True,
             cwd=self.source_dir,
         )

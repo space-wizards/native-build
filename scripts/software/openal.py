@@ -3,6 +3,7 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
+from common.cmake import cmake_common_args
 
 
 class OpenAL(Software):
@@ -26,13 +27,12 @@ class OpenAL(Software):
             [
                 cmake,
                 f"-B{self.dest_dir}",
-                "-GNinja",
                 "-DALSOFT_UTILS=Off",
                 "-DALSOFT_EXAMPLES=Off",
                 "-DALSOFT_TESTS=Off",
                 "-DALSOFT_INSTALL=Off",
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-            ],
+            ] + cmake_common_args(),
             text=True,
             cwd=self.source_dir,
         )

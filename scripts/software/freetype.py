@@ -3,6 +3,7 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
+from common.cmake import cmake_common_args
 
 
 class Freetype(Software):
@@ -26,10 +27,11 @@ class Freetype(Software):
             [
                 cmake,
                 f"-B{self.dest_dir}",
-                "-GNinja",
                 "-DBUILD_SHARED_LIBS=On",
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-            ],
+                "-DFT_DISABLE_PNG=TRUE",
+                "-DFT_DISABLE_BROTLI=TRUE",
+                "-DFT_DISABLE_HARFBUZZ=TRUE",
+            ] + cmake_common_args(),
             text=True,
             cwd=self.source_dir,
         )

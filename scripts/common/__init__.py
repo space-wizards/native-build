@@ -7,7 +7,7 @@ import subprocess
 import sys
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-ROOT_DIR = SCRIPT_DIR.parent
+ROOT_DIR = SCRIPT_DIR.parent.parent
 BUILD_DIR = ROOT_DIR.joinpath("build")
 ARTIFACT_DIR = ROOT_DIR.joinpath("artifacts")
 
