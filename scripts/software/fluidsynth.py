@@ -50,7 +50,7 @@ class Fluidsynth(Software):
         platform = Platform.get()
         if platform == Platform.Windows or platform == Platform.OSX:
             if platform == Platform.Windows:
-                vcpkg_triplet = f"{arch.get_vcpkg_arch()}-get-windows-static-md"
+                vcpkg_triplet = f"{arch.get_vcpkg_arch()}-windows-static-md"
             else:
                 vcpkg_triplet = f"{arch.get_vcpkg_arch()}-osx"
             vc_install_dir = ROOT_DIR.joinpath("vcpkg_installed", vcpkg_triplet)
