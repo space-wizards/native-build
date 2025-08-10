@@ -41,6 +41,7 @@ class Fluidsynth(Software):
             "-Denable-lash=OFF",
             "-Denable-framework=OFF",
             "-Denable-systemd=OFF",
+            "-Denable-coreaudio=OFF"
         ] + cmake_common_args(self.build_args)
 
         generation_env = os.environ.copy()
