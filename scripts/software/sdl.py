@@ -31,6 +31,9 @@ class SDL(Software):
             "-DSDL_WERROR=Off",
             "-DSDL_TESTS=Off",
             "-DSDL_INSTALL_TESTS=Off",
+            "-DSDL_GPU=Off",
+            "-DSDL_RENDER=Off",
+            "-DSDL_CAMERA=Off",
         ] + cmake_common_args(self.build_args)
 
         Github.log("Setting up CMake...")
