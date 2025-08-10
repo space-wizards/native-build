@@ -3,12 +3,13 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
-from common.cmake import cmake_common_args
+from common.cmake import cmake_common_args, locate_cmake
+from common.args import BuildArgs
 
 
 class ZStd(Software):
-    def __init__(self) -> None:
-        super().__init__("zstd", "zstd")
+    def __init__(self, args: BuildArgs) -> None:
+        super().__init__(args, "zstd", "zstd")
 
         self.outputs = {
             Platform.Windows: [
@@ -20,7 +21,7 @@ class ZStd(Software):
         }
 
     def build(self) -> None:
-        cmake = shutil.which("cmake")
+        cmake = locate_cmake()
 
         Github.log("Setting up CMake...")
         result = subprocess.call(
@@ -35,7 +36,7 @@ class ZStd(Software):
                 "-DZSTD_MULTITHREAD_SUPPORT=ON",
                 "-DZSTD_BUILD_CONTRIB=OFF",
                 "-DZSTD_LEGACY_SUPPORT=OFF",
-            ] + cmake_common_args(),
+            ] + cmake_common_args(self.build_args),
             text=True,
             cwd=self.source_dir,
         )

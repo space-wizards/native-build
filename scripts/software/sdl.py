@@ -3,12 +3,13 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
-from common.cmake import cmake_common_args
+from common.cmake import cmake_common_args, locate_cmake
+from common.args import BuildArgs
 
 
 class SDL(Software):
-    def __init__(self) -> None:
-        super().__init__("SDL", "SDL")
+    def __init__(self, build_args: BuildArgs) -> None:
+        super().__init__(build_args, "SDL", "SDL")
 
         self.outputs = {
             Platform.Windows: [
@@ -20,7 +21,7 @@ class SDL(Software):
         }
 
     def build(self) -> None:
-        cmake = shutil.which("cmake")
+        cmake = locate_cmake()
 
         cmake_args = [
             cmake,
@@ -30,7 +31,7 @@ class SDL(Software):
             "-DSDL_WERROR=Off",
             "-DSDL_TESTS=Off",
             "-DSDL_INSTALL_TESTS=Off",
-        ] + cmake_common_args()
+        ] + cmake_common_args(self.build_args)
 
         Github.log("Setting up CMake...")
         result = subprocess.call(

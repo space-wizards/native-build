@@ -3,12 +3,13 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
-from common.cmake import cmake_common_args
+from common.cmake import cmake_common_args, locate_cmake
+from common.args import BuildArgs
 
 
 class Freetype(Software):
-    def __init__(self) -> None:
-        super().__init__("Freetype", "freetype")
+    def __init__(self, args: BuildArgs) -> None:
+        super().__init__(args, "Freetype", "freetype")
 
         self.outputs = {
             Platform.Windows: [
@@ -20,7 +21,7 @@ class Freetype(Software):
         }
 
     def build(self) -> None:
-        cmake = shutil.which("cmake")
+        cmake = locate_cmake()
 
         Github.log("Setting up CMake...")
         result = subprocess.call(
@@ -31,7 +32,7 @@ class Freetype(Software):
                 "-DFT_DISABLE_PNG=TRUE",
                 "-DFT_DISABLE_BROTLI=TRUE",
                 "-DFT_DISABLE_HARFBUZZ=TRUE",
-            ] + cmake_common_args(),
+            ] + cmake_common_args(self.build_args),
             text=True,
             cwd=self.source_dir,
         )
@@ -50,9 +51,3 @@ class Freetype(Software):
         )
         if result != 0:
             Github.bail("Failed to build")
-
-
-if __name__ == "__main__":
-    library = Freetype()
-    library.build()
-    library.publish()

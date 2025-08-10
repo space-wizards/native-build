@@ -9,18 +9,24 @@ from software.freetype import Freetype
 from software.fluidsynth import Fluidsynth
 
 from common import Github, Platform, Software, dump_build_notes, ARTIFACT_DIR, ROOT_DIR
+from common.software import SoftwareImpl
+from common.args import parse_args
+from common.platform import RID_OSX_ARM64, RID_OSX_X64
 
 if __name__ == "__main__":
-    to_build: list[Software] = [
-        ZStd(),
-        GLFW(),
-        SDL(),
-        OpenAL(),
-        Freetype(),
-        #Fluidsynth(),
+    args = parse_args(RID_OSX_ARM64)
+    to_build: list[SoftwareImpl] = [
+        ZStd,
+        GLFW,
+        SDL,
+        OpenAL,
+        Freetype,
+        #Fluidsynth,
     ]
 
-    for build in to_build:
+    build_softwares = [b(args) for b in to_build]
+
+    for build in build_softwares:
         with Github.LogGroup(f"Building {build.name}"):
             build.build()
 
@@ -50,8 +56,8 @@ if __name__ == "__main__":
             build.publish()
 
     dump_build_notes(
-        "native-build (OSX x64)",
+        f"native-build (macOS)",
         ROOT_DIR,
         ARTIFACT_DIR.joinpath("notes.md"),
-        [f"- {build.name}" for build in to_build],
+        [f"- {build.name}" for build in build_softwares],
     )

@@ -3,12 +3,12 @@
 import subprocess
 import shutil
 from common import Software, Github, Platform
-from common.cmake import cmake_common_args
-
+from common.cmake import cmake_common_args, locate_cmake
+from common.args import BuildArgs
 
 class OpenAL(Software):
-    def __init__(self) -> None:
-        super().__init__("OpenAL-Soft", "openal-soft")
+    def __init__(self, args: BuildArgs) -> None:
+        super().__init__(args, "OpenAL-Soft", "openal-soft")
 
         self.outputs = {
             Platform.Windows: [
@@ -20,7 +20,7 @@ class OpenAL(Software):
         }
 
     def build(self) -> None:
-        cmake = shutil.which("cmake")
+        cmake = locate_cmake()
 
         Github.log("Setting up CMake...")
         result = subprocess.call(
@@ -32,7 +32,7 @@ class OpenAL(Software):
                 "-DALSOFT_TESTS=Off",
                 "-DALSOFT_INSTALL=Off",
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-            ] + cmake_common_args(),
+            ] + cmake_common_args(self.build_args),
             text=True,
             cwd=self.source_dir,
         )
