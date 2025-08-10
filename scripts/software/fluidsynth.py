@@ -3,15 +3,15 @@
 import os
 import subprocess
 import shutil
-from common import Software, Github, Platform, ROOT_DIR
+from common import Software, Github, Platform, ROOT_DIR, BuildArgs
 
 
 class Fluidsynth(Software):
-    def __init__(self) -> None:
-        super().__init__("Fluidsynth", "fluidsynth")
+    def __init__(self, args: BuildArgs) -> None:
+        super().__init__(args, "Fluidsynth", "fluidsynth")
 
         self.outputs = {
-            Platform.Windows: ["src/fluidsynth.lib", "src/fluidsynth.pdb"],
+            Platform.Windows: ["src/libfluidsynth-3.dll", "src/libfluidsynth-3.pdb"],
             Platform.Linux: ["src/libfluidsynth.so"],
             Platform.OSX: ["src/libfluidsynth.3.dylib"],
         }
@@ -44,7 +44,7 @@ class Fluidsynth(Software):
         generation_env = os.environ.copy()
 
         if Platform.get() == Platform.Windows:
-            vc_install_dir = ROOT_DIR.joinpath("vcpkg_installed/x64-windows-release")
+            vc_install_dir = ROOT_DIR.joinpath("vcpkg_installed/x64-windows-static-md")
             tools_directories = [
                 str(vc_install_dir.joinpath("tools/pkgconf")),
                 str(vc_install_dir.joinpath("lib")),
@@ -78,9 +78,3 @@ class Fluidsynth(Software):
         )
         if result != 0:
             Github.bail("Failed to build")
-
-
-if __name__ == "__main__":
-    library = Fluidsynth()
-    library.build()
-    library.publish()

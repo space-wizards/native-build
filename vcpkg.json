@@ -1,5 +1,9 @@
 {
   "dependencies": [
-    "fluidsynth"
+    {
+      "name": "glib",
+      "version>=": "2.80.0"
+    },
+    "pkgconf"
   ]
 }
