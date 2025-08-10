@@ -8,7 +8,7 @@ from software.openal import OpenAL
 from software.freetype import Freetype
 from software.fluidsynth import Fluidsynth
 
-from common import Github, Platform, Software, dump_build_notes, ARTIFACT_DIR, ROOT_DIR
+from common import Github, Platform, Software, filter_software_to_build, dump_build_notes, ARTIFACT_DIR, ROOT_DIR
 from common.software import SoftwareImpl
 from common.args import parse_args
 from common.platform import RID_OSX_ARM64, RID_OSX_X64
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         Fluidsynth,
     ]
 
-    build_softwares = [b(args) for b in to_build]
+    build_softwares = filter_software_to_build(to_build, args)
 
     for build in build_softwares:
         with Github.LogGroup(f"Building {build.name}"):

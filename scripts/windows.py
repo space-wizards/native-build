@@ -7,7 +7,7 @@ from software.openal import OpenAL
 from software.fluidsynth import Fluidsynth
 from software.freetype import Freetype
 
-from common import Github, Software, SoftwareImpl, parse_args, dump_build_notes, ARTIFACT_DIR, ROOT_DIR
+from common import Github, Software, SoftwareImpl, parse_args, dump_build_notes, filter_software_to_build,  ARTIFACT_DIR, ROOT_DIR
 from common.platform import RID_WIN_X64
 
 if __name__ == "__main__":
@@ -21,7 +21,7 @@ if __name__ == "__main__":
         Fluidsynth,
     ]
 
-    build_softwares = [b(args) for b in to_build]
+    build_softwares = filter_software_to_build(to_build, args)
 
     # We expect vcpkg_installed to exist on system, else Fluidsynth is going to fail
     vcpkg_dir = ROOT_DIR.joinpath("vcpkg_installed")

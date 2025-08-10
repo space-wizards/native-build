@@ -1,7 +1,7 @@
 import shutil
 from abc import abstractmethod
 from pathlib import Path
-from typing import Callable
+from typing import Callable, Iterable
 
 from .platform import Platform
 from .github import Github
@@ -58,3 +58,14 @@ class Software:
         )
 
 SoftwareImpl = Callable[[BuildArgs], Software]
+
+def filter_software_to_build(software_available: Iterable[SoftwareImpl], build_args: BuildArgs) -> list[Software]:
+    softwares = []
+    for software_type in software_available:
+        software = software_type(build_args)
+        if build_args.software is not None and software.name not in build_args.software:
+            continue
+        
+        softwares.append(software)
+
+    return softwares
