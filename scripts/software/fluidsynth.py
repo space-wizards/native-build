@@ -34,10 +34,13 @@ class Fluidsynth(Software):
             "-Denable-network=OFF",
             "-Denable-oss=OFF",
             "-Denable-sdl2=OFF",
+            "-Denable-sdl3=OFF",
+            "-Denable-libinstpatch=OFF",
             "-Denable-pulseaudio=OFF",
             "-Denable-readline=OFF",
             "-Denable-lash=OFF",
             "-Denable-framework=OFF",
+            "-Denable-systemd=OFF",
             "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
         ]
 
