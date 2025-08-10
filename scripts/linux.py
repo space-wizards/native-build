@@ -22,7 +22,6 @@ if __name__ == "__main__":
         GLFW,
         SDL,
         OpenAL,
-        Freetype,
         #Fluidsynth,
     ]
 
