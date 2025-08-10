@@ -4,6 +4,9 @@
       "name": "glib",
       "version>=": "2.80.0"
     },
-    "pkgconf"
+    {
+      "name": "pkgconf",
+      "host": true
+    }
   ]
 }

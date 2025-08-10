@@ -3,8 +3,9 @@
 import os
 import subprocess
 import shutil
-from common import Software, Github, Platform, ROOT_DIR, BuildArgs
-
+from common import Software, Github, Platform, ROOT_DIR, BuildArgs, Architecture
+from common.cmake import locate_cmake, cmake_common_args
+from common.vcpkg import get_vcpkg_host_triplet
 
 class Fluidsynth(Software):
     def __init__(self, args: BuildArgs) -> None:
@@ -17,13 +18,12 @@ class Fluidsynth(Software):
         }
 
     def build(self) -> None:
-        cmake = shutil.which("cmake")
+        cmake = locate_cmake()
 
         Github.log("Setting up CMake...")
         generation_args = [
             cmake,
             f"-B{self.dest_dir}",
-            "-GNinja",
             "-Denable-aufile=OFF",
             "-Denable-dbus=OFF",
             "-Denable-ipv6=OFF",
@@ -41,16 +41,22 @@ class Fluidsynth(Software):
             "-Denable-lash=OFF",
             "-Denable-framework=OFF",
             "-Denable-systemd=OFF",
-            "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
-        ]
+        ] + cmake_common_args(self.build_args)
 
         generation_env = os.environ.copy()
 
-        if Platform.get() == Platform.Windows:
-            vc_install_dir = ROOT_DIR.joinpath("vcpkg_installed/x64-windows-static-md")
+        arch = Architecture.from_rid(self.build_args.rid)
+        platform = Platform.get()
+        if platform == Platform.Windows or platform == Platform.OSX:
+            if platform == Platform.Windows:
+                vcpkg_triplet = f"{arch.get_vcpkg_arch()}-get-windows-static-md"
+            else:
+                vcpkg_triplet = f"{arch.get_vcpkg_arch()}-osx"
+            vc_install_dir = ROOT_DIR.joinpath("vcpkg_installed", vcpkg_triplet)
+            tools_install_dir = ROOT_DIR.joinpath("vcpkg_installed", get_vcpkg_host_triplet())
             tools_directories = [
-                str(vc_install_dir.joinpath("tools/pkgconf")),
-                str(vc_install_dir.joinpath("lib")),
+                str(tools_install_dir.joinpath("tools", "pkgconf")),
+                str(tools_install_dir.joinpath("lib")),
             ]
 
             generation_args += [
@@ -60,7 +66,7 @@ class Fluidsynth(Software):
             ]
 
             generation_env["PKG_CONFIG_PATH"] = str(
-                vc_install_dir.joinpath("lib\\pkgconfig")
+                vc_install_dir.joinpath("lib", "pkgconfig")
             )
 
         result = subprocess.call(
@@ -70,13 +76,13 @@ class Fluidsynth(Software):
             Github.bail("Failed to setup CMake")
 
         Github.log("Building up CMake...")
-        subprocess.call(
+        subprocess.run(
             [
                 cmake,
                 "--build",
                 ".",
             ],
-            text=True,
+            check=True,
             cwd=self.dest_dir,
         )
         if result != 0:

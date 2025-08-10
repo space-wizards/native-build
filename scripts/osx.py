@@ -21,7 +21,7 @@ if __name__ == "__main__":
         SDL,
         OpenAL,
         Freetype,
-        #Fluidsynth,
+        Fluidsynth,
     ]
 
     build_softwares = [b(args) for b in to_build]

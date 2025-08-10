@@ -24,6 +24,13 @@ class Architecture(Enum):
             return Architecture.X64
         raise ValueError(f"Unable to determine architecture from RID: {rid}")
 
+    def get_vcpkg_arch(self) -> str:
+        if self == Architecture.X64:
+            return "x64"
+        if self == Architecture.Arm64:
+            return "arm64"
+        raise ValueError()
+
 class Platform(Enum):
     Windows = (1,)
     Linux = (2,)
