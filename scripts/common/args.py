@@ -16,4 +16,4 @@ def parse_args(default_rid: Rid) -> BuildArgs:
 
     args = parser.parse_args()
 
-    return BuildArgs(Rid(args.rid), set(args.software) or None)
+    return BuildArgs(Rid(args.rid), set(args.software or []) or None)
