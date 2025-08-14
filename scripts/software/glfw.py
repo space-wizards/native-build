@@ -2,12 +2,12 @@
 
 import subprocess
 import shutil
-from common import Software, Github, Platform
+from common import CmakeSoftware, Github, Platform
 from common.cmake import cmake_common_args, locate_cmake
 from common.args import BuildArgs
 
 
-class GLFW(Software):
+class GLFW(CmakeSoftware):
     def __init__(self, args: BuildArgs) -> None:
         super().__init__(args, "GLFW", "glfw")
 

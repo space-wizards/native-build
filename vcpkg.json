@@ -1,12 +1,7 @@
 {
   "dependencies": [
     {
-      "name": "glib",
-      "version>=": "2.80.0"
-    },
-    {
-      "name": "pkgconf",
-      "host": true
+      "name": "fluidsynth"
     }
   ]
 }

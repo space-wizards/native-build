@@ -1,4 +1,7 @@
 import subprocess
+import shutil
+import errno
+import os
 
 from pathlib import Path
 
@@ -31,3 +34,14 @@ Contains:
             f"Skipping git information for {working_dir} due to exception: {e}"
         )
         pass
+
+
+StrPath = str | os.PathLike
+
+# https://stackoverflow.com/a/1994840
+def copy_file_or_tree(src: StrPath, dst: StrPath):
+    try:
+        shutil.copytree(src, dst)
+    except OSError as exc: # python >2.5
+        if exc.errno in (errno.ENOTDIR, errno.EINVAL):
+            shutil.copy(src, dst)

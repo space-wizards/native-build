@@ -5,7 +5,7 @@ import platform as _platform  # Python gets confused with similar names here
 Rid = NewType('Rid', str)
 
 RID_WIN_X64 = Rid("win-x64")
-RID_WIN_AMR64 = Rid("win-arm64")
+RID_WIN_ARM64 = Rid("win-arm64")
 RID_OSX_X64 = Rid("osx-x64")
 RID_OSX_ARM64 = Rid("osx-arm64")
 RID_LINUX_X64 = Rid("linux-x64")

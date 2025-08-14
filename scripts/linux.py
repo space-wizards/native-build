@@ -30,6 +30,7 @@ if __name__ == "__main__":
     for build in build_softwares:
         with Github.LogGroup(f"Building {build.name}"):
             build.build()
+            build.publish()
 
             # Strip debug information out per build's outputs
             new_outputs = []
@@ -40,15 +41,13 @@ if __name__ == "__main__":
                     [
                         "objcopy",
                         "--only-keep-debug",
-                        str(build.dest_dir.joinpath(output_name)),
-                        str(build.dest_dir.joinpath(debug_name)),
+                        str(build.publish_dir.joinpath(output_name)),
+                        str(build.publish_dir.joinpath(debug_name)),
                     ],
                     check=True
                 )
                 new_outputs.append(debug_name)
             build.outputs[Platform.Linux].extend(new_outputs)
-
-            build.publish()
 
     dump_build_notes(
         "native-build (Linux)",

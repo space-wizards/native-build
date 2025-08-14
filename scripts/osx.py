@@ -29,6 +29,7 @@ if __name__ == "__main__":
     for build in build_softwares:
         with Github.LogGroup(f"Building {build.name}"):
             build.build()
+            build.publish()
 
             new_outputs = []
             for output_name in build.outputs[Platform.OSX]:
@@ -37,7 +38,7 @@ if __name__ == "__main__":
                 subprocess.run(
                     [
                         "dsymutil",
-                        str(build.dest_dir.joinpath(output_name)),
+                        str(build.publish_dir.joinpath(output_name)),
                     ],
                     check=True
                 )
@@ -45,15 +46,15 @@ if __name__ == "__main__":
                     [
                         "strip",
                         "-S",
-                        str(build.dest_dir.joinpath(output_name)),
+                        str(build.publish_dir.joinpath(output_name)),
                     ],
                     check=True
                 )
 
                 new_outputs.append(debug_name)
+
             build.outputs[Platform.OSX].extend(new_outputs)
 
-            build.publish()
 
     dump_build_notes(
         f"native-build (macOS)",

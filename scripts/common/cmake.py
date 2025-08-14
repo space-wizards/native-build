@@ -3,6 +3,7 @@ import shutil
 from .platform import Architecture
 from .osx import DEPLOYMENT_TARGET
 from .args import BuildArgs
+from .software import SelfBuiltSoftware
 
 
 def locate_cmake() -> str:
@@ -26,3 +27,7 @@ def cmake_common_args(args: BuildArgs) -> list[str]:
         cmake_args.append(f"-DCMAKE_OSX_ARCHITECTURES=arm64")
 
     return cmake_args
+
+
+class CmakeSoftware(SelfBuiltSoftware):
+    pass

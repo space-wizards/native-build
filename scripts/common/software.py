@@ -1,5 +1,5 @@
 import shutil
-from abc import abstractmethod
+from abc import abstractmethod, ABCMeta
 from pathlib import Path
 from typing import Callable, Iterable
 
@@ -9,14 +9,9 @@ from .helpers import dump_build_notes
 from .paths import *
 from .args import BuildArgs
 
-class Software:
-    def __init__(self, build_args: BuildArgs, name: str, dir: str) -> None:
+class Software(metaclass=ABCMeta):
+    def __init__(self, build_args: BuildArgs, name: str) -> None:
         self.name = name
-        self.source_dir: Path = ROOT_DIR.joinpath(dir)
-        self.dest_dir: Path = BUILD_DIR.joinpath(dir, build_args.rid)
-        if self.dest_dir.exists():
-            shutil.rmtree(self.dest_dir)
-        self.dest_dir.mkdir(exist_ok=True, parents=True)
 
         self.publish_dir = ARTIFACT_DIR.joinpath(self.name, build_args.rid)
         if self.publish_dir.exists():
@@ -30,6 +25,35 @@ class Software:
     @abstractmethod
     def build(self) -> None:
         pass
+
+    @abstractmethod
+    def publish(self) -> None:
+        pass
+
+SoftwareImpl = Callable[[BuildArgs], Software]
+
+
+def filter_software_to_build(software_available: Iterable[SoftwareImpl], build_args: BuildArgs) -> list[Software]:
+    softwares = []
+    for software_type in software_available:
+        software = software_type(build_args)
+        if build_args.software is not None and software.name not in build_args.software:
+            continue
+        
+        softwares.append(software)
+
+    return softwares
+
+
+class SelfBuiltSoftware(Software):
+    def __init__(self, build_args: BuildArgs, name: str, dir: str) -> None:
+        super().__init__(build_args, name)
+
+        self.source_dir: Path = ROOT_DIR.joinpath(dir)
+        self.dest_dir: Path = BUILD_DIR.joinpath(dir, build_args.rid)
+        if self.dest_dir.exists():
+            shutil.rmtree(self.dest_dir)
+        self.dest_dir.mkdir(exist_ok=True, parents=True)
 
     def publish(self) -> None:
         os = Platform.get()
@@ -56,16 +80,3 @@ class Software:
             self.publish_dir.joinpath("notes.md"),
             [f"- {self.dest_dir.joinpath(output).name}" for output in self.outputs[os]]
         )
-
-SoftwareImpl = Callable[[BuildArgs], Software]
-
-def filter_software_to_build(software_available: Iterable[SoftwareImpl], build_args: BuildArgs) -> list[Software]:
-    softwares = []
-    for software_type in software_available:
-        software = software_type(build_args)
-        if build_args.software is not None and software.name not in build_args.software:
-            continue
-        
-        softwares.append(software)
-
-    return softwares
