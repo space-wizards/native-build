@@ -1,6 +1,6 @@
 import shutil
 
-from .platform import Architecture
+from .platform import Architecture, Platform
 from .osx import DEPLOYMENT_TARGET
 from .args import BuildArgs
 from .software import SelfBuiltSoftware
@@ -25,6 +25,10 @@ def cmake_common_args(args: BuildArgs) -> list[str]:
         cmake_args.append(f"-DCMAKE_OSX_ARCHITECTURES=x86_64")
     elif arch == Architecture.Arm64:
         cmake_args.append(f"-DCMAKE_OSX_ARCHITECTURES=arm64")
+
+    platform = Platform.from_rid(args.rid)
+    if platform == Platform.Linux:
+        cmake_args.append(f"-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-Bsymbolic")
 
     return cmake_args
 

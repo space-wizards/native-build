@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
+
 from software.zstd import ZStd
 from software.glfw import GLFW
 from software.sdl import SDL
@@ -22,7 +24,7 @@ if __name__ == "__main__":
         GLFW,
         SDL,
         OpenAL,
-        #Fluidsynth,
+        Fluidsynth,
     ]
 
     build_softwares = filter_software_to_build(to_build, args)
@@ -34,7 +36,8 @@ if __name__ == "__main__":
 
             # Strip debug information out per build's outputs
             new_outputs = []
-            for output_name in build.outputs[Platform.Linux]:
+            for output in build.outputs[Platform.Linux]:
+                output_name = Path(output).name
                 Github.log(f"Moving debug information for {output_name}")
                 debug_name = f"{output_name}.debug"
                 subprocess.run(
@@ -46,7 +49,17 @@ if __name__ == "__main__":
                     ],
                     check=True
                 )
+
+                subprocess.run(
+                    [
+                        "strip",
+                        str(build.publish_dir.joinpath(output_name)),
+                    ],
+                    check=True
+                )
                 new_outputs.append(debug_name)
+
+
             build.outputs[Platform.Linux].extend(new_outputs)
 
     dump_build_notes(

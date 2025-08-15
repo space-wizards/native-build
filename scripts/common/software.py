@@ -5,7 +5,7 @@ from typing import Callable, Iterable
 
 from .platform import Platform
 from .github import Github
-from .helpers import dump_build_notes
+from .helpers import dump_build_notes, copy_file_or_tree
 from .paths import *
 from .args import BuildArgs
 
@@ -72,7 +72,7 @@ class SelfBuiltSoftware(Software):
             # output name here
             new_path = self.publish_dir.joinpath(Path(output).name)
             Github.log(f"[{output_path}] => [{new_path}]")
-            output_path.rename(new_path)
+            copy_file_or_tree(output_path, new_path)
 
         dump_build_notes(
             f"{self.name} (`{self.build_args}`)",

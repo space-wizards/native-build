@@ -16,7 +16,7 @@ class SDL(CmakeSoftware):
                 "SDL3.dll",
                 "SDL3.pdb",
             ],
-            Platform.Linux: ["libSDL3.0.so"],
+            Platform.Linux: ["libSDL3.so"],
             Platform.OSX: ["libSDL3.dylib"],
         }
 
