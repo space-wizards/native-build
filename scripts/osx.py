@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 import subprocess
+
+from pathlib import Path
+
 from software.zstd import ZStd
 from software.glfw import GLFW
 from software.sdl import SDL
@@ -32,7 +35,8 @@ if __name__ == "__main__":
             build.publish()
 
             new_outputs = []
-            for output_name in build.outputs[Platform.OSX]:
+            for output in build.outputs[Platform.OSX]:
+                output_name = Path(output).name
                 Github.log(f"Moving debug information for {output_name}")
                 debug_name = f"{output_name}.dSYM"
                 subprocess.run(

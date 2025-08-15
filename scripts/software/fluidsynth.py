@@ -8,6 +8,6 @@ class Fluidsynth(VcpkgSoftware):
 
         self.outputs = {
             Platform.Windows: ["bin/libfluidsynth-3.dll", "bin/libfluidsynth-3.pdb"],
-            Platform.Linux: ["bin/libfluidsynth.so"],
-            Platform.OSX: ["bin/libfluidsynth.3.dylib"],
+            Platform.Linux: ["lib/libfluidsynth.so"],
+            Platform.OSX: ["lib/libfluidsynth.3.dylib"],
         }
