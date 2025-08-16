@@ -16,8 +16,8 @@ class GLFW(CmakeSoftware):
                 "src/glfw3.dll",
                 "src/glfw3.pdb",
             ],
-            Platform.Linux: ["src/libglfw.so"],
-            Platform.OSX: ["src/libglfw.dylib"],
+            Platform.Linux: ["src/libglfw.so.3"],
+            Platform.OSX: ["src/libglfw.3.dylib"],
         }
 
     def build(self) -> None:

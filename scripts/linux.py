@@ -9,7 +9,7 @@ from software.openal import OpenAL
 from software.freetype import Freetype
 from software.fluidsynth import Fluidsynth
 
-from common import Github, Software, dump_build_notes, filter_software_to_build, ARTIFACT_DIR, Platform, ROOT_DIR
+from common import Github, Software, dump_build_notes, filter_software_to_build, ARTIFACT_DIR, Platform, ROOT_DIR, SoftwareOutput
 from common.software import SoftwareImpl
 from common.args import parse_args
 from common.platform import RID_LINUX_X64
@@ -37,7 +37,7 @@ if __name__ == "__main__":
             # Strip debug information out per build's outputs
             new_outputs = []
             for output in build.outputs[Platform.Linux]:
-                output_name = Path(output).name
+                output_name = SoftwareOutput.get_dst_name(output)
                 Github.log(f"Moving debug information for {output_name}")
                 debug_name = f"{output_name}.debug"
                 subprocess.run(

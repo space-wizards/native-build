@@ -16,8 +16,8 @@ class ZStd(CmakeSoftware):
                 "lib/zstd.dll",
                 "lib/zstd.pdb",
             ],
-            Platform.Linux: ["lib/libzstd.so"],
-            Platform.OSX: ["lib/libzstd.dylib"],
+            Platform.Linux: ["lib/libzstd.so.1"],
+            Platform.OSX: ["lib/libzstd.1.dylib"],
         }
 
     def build(self) -> None:

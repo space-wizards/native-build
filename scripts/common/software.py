@@ -1,4 +1,5 @@
 import shutil
+from dataclasses import dataclass
 from abc import abstractmethod, ABCMeta
 from pathlib import Path
 from typing import Callable, Iterable
@@ -9,6 +10,57 @@ from .helpers import dump_build_notes, copy_file_or_tree
 from .paths import *
 from .args import BuildArgs
 
+
+@dataclass
+class SoftwareOutput:
+    src: str
+    dst: str
+
+    def get_src(self: "SoftwareOutputLike") -> str:
+        if isinstance(self, SoftwareOutput):
+            return self.src
+
+        if isinstance(self, str):
+            return self
+
+        raise ValueError()
+
+    def get_dst(self: "SoftwareOutputLike") -> str:
+        if isinstance(self, SoftwareOutput):
+            return self.dst
+
+        if isinstance(self, str):
+            return self
+
+        raise ValueError()
+
+    def get_dst_name(self: "SoftwareOutputLike") -> str:
+        return Path(SoftwareOutput.get_dst(self)).name
+
+
+SoftwareOutputLike = str | SoftwareOutput
+
+
+def software_output_get_src(output: SoftwareOutputLike) -> str:
+    if output is str:
+        return Path(output).name
+
+    if output is SoftwareOutput:
+        return Path(output.dst).name
+
+    raise ValueError()
+
+
+def software_output_get_name(output: SoftwareOutputLike) -> str:
+    if output is str:
+        return Path(output).name
+
+    if output is SoftwareOutput:
+        return Path(output.dst).name
+
+    raise ValueError()
+
+
 class Software(metaclass=ABCMeta):
     def __init__(self, build_args: BuildArgs, name: str) -> None:
         self.name = name
@@ -18,7 +70,7 @@ class Software(metaclass=ABCMeta):
             shutil.rmtree(self.publish_dir)
         self.publish_dir.mkdir(exist_ok=True, parents=True)
 
-        self.outputs: dict[Platform, list[str]] = {}
+        self.outputs: dict[Platform, list[SoftwareOutputLike]] = {}
         self.tools: dict[str, Path] = {}
         self.build_args = build_args
 
@@ -29,6 +81,7 @@ class Software(metaclass=ABCMeta):
     @abstractmethod
     def publish(self) -> None:
         pass
+
 
 SoftwareImpl = Callable[[BuildArgs], Software]
 
@@ -62,7 +115,7 @@ class SelfBuiltSoftware(Software):
 
         for output in self.outputs[os]:
             output_path = self.dest_dir.joinpath(
-                output
+                SoftwareOutput.get_src(output)
             ).resolve()  # Ensure we have resolved symlinks
             if not output_path.exists():
                 Github.bail(f"Failed to find output [{output_path}]")
@@ -70,7 +123,7 @@ class SelfBuiltSoftware(Software):
 
             # Since output_path might have changed (due to symlinks), re-use the expected
             # output name here
-            new_path = self.publish_dir.joinpath(Path(output).name)
+            new_path = self.publish_dir / SoftwareOutput.get_dst_name(output)
             Github.log(f"[{output_path}] => [{new_path}]")
             copy_file_or_tree(output_path, new_path)
 
@@ -78,5 +131,5 @@ class SelfBuiltSoftware(Software):
             f"{self.name} (`{self.build_args}`)",
             self.source_dir,
             self.publish_dir.joinpath("notes.md"),
-            [f"- {self.dest_dir.joinpath(output).name}" for output in self.outputs[os]]
+            [f"- {SoftwareOutput.get_dst_name(output)}" for output in self.outputs[os]]
         )

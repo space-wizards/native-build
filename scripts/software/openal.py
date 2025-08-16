@@ -15,8 +15,8 @@ class OpenAL(CmakeSoftware):
                 "OpenAL32.dll",
                 "OpenAL32.pdb",
             ],
-            Platform.Linux: ["libopenal.so"],
-            Platform.OSX: ["libopenal.dylib"],
+            Platform.Linux: ["libopenal.so.1"],
+            Platform.OSX: ["libopenal.1.dylib"],
         }
 
     def build(self) -> None:

@@ -16,8 +16,8 @@ class SDL(CmakeSoftware):
                 "SDL3.dll",
                 "SDL3.pdb",
             ],
-            Platform.Linux: ["libSDL3.so"],
-            Platform.OSX: ["libSDL3.dylib"],
+            Platform.Linux: ["libSDL3.so.0"],
+            Platform.OSX: ["libSDL3.0.dylib"],
         }
 
     def build(self) -> None:

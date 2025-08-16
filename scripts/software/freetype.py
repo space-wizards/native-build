@@ -2,7 +2,7 @@
 
 import subprocess
 import shutil
-from common import CmakeSoftware, Github, Platform
+from common import CmakeSoftware, Github, Platform, SoftwareOutput
 from common.cmake import cmake_common_args, locate_cmake
 from common.args import BuildArgs
 
@@ -13,11 +13,11 @@ class Freetype(CmakeSoftware):
 
         self.outputs = {
             Platform.Windows: [
-                "freetype.dll",
-                "freetype.pdb",
+                SoftwareOutput("freetype.dll", "freetype6.dll"),
+                SoftwareOutput("freetype.pdb", "freetype6.pdb"),
             ],
-            Platform.Linux: ["libfreetype.so"],
-            Platform.OSX: ["libfreetype.dylib"],
+            Platform.Linux: ["libfreetype.so.6"],
+            Platform.OSX: ["libfreetype.6.dylib"],
         }
 
     def build(self) -> None:
