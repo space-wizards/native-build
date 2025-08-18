@@ -6,34 +6,10 @@ from pathlib import Path
 from . import platform as p
 from .args import BuildArgs
 from .software import Software, SoftwareOutput
-from .platform import Platform, Rid
+from .platform import Platform, Rid, get_host_rid
 from .github import Github
 from .paths import VCPKG_INSTALLED_DIR, ROOT_DIR
 from .helpers import dump_build_notes, copy_file_or_tree
-
-
-def get_vcpkg_host_triplet() -> str:
-    platform = _platform.system()
-    machine = _platform.machine()
-
-    platform = _platform.system()
-    if platform == "Windows":
-        if machine == "arm64":
-            return "arm64-windows"
-        if machine == "AMD64" or machine == "x86_64":
-            return "x64-windows"
-    elif platform == "Linux":
-        if machine == "arm64":
-            return "arm64-linux"
-        if machine == "AMD64" or machine == "x86_64":
-            return "x64-linux"
-    elif platform == "Darwin":
-        if machine == "arm64":
-            return "arm64-osx"
-        if machine == "AMD64" or machine == "x86_64":
-            return "x64-osx"
-
-    raise RuntimeError(f"Unknown platform {platform}")
 
 
 # vcpkg triplets we're using to build stuff.
@@ -53,6 +29,10 @@ def vcpkg_triplet_for_rid(rid: Rid) -> str:
         raise RuntimeError(f"Unknown RID: '{rid}'")
 
     return res
+
+
+def get_vcpkg_host_triplet() -> str:
+    return vcpkg_triplet_for_rid(get_host_rid())
 
 
 class VcpkgSoftware(Software):

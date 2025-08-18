@@ -33,7 +33,7 @@ def get_host_rid() -> Rid:
         if machine == "AMD64" or machine == "x86_64":
             return RID_OSX_X64
 
-    raise RuntimeError(f"Unknown platform {platform}")
+    raise RuntimeError(f"Unknown platform {platform}/{machine}")
 
 
 class Architecture(Enum):
