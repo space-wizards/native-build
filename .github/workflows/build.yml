@@ -4,68 +4,83 @@ on:
   workflow_dispatch:
 
 jobs:
-  #osx-x64:
-  #osx-arm64:
-  win-x64:
-    runs-on: windows-2022
+  osx-x64:
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: bootstrap vcpkg
-        run: ./vcpkg/bootstrap-vcpkg.bat
+      - name: Install Deps
+        run: brew install ninja
 
-      - name: build vcpkg packages
-        run: ./windows/build-vcpkg.ps1 x64-windows win-x64
+      - name: Build
+        run: python ./scripts/osx.py
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
-          name: win-x64
-          path: builds/win-x64/*.dll
-
-  win-arm64:
-    runs-on: windows-2022
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: true
-          fetch-depth: 0
-
-      - name: bootstrap vcpkg
-        run: ./vcpkg/bootstrap-vcpkg.bat
-
-      - name: build vcpkg packages
-        run: ./windows/build-vcpkg.ps1 arm64-windows win-arm64
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: win-arm64
-          path: builds/win-arm64/*.dll
+          name: osx-x64
+          path: artifacts
+          if-no-files-found: error
 
   linux-x64:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: true
           fetch-depth: 0
 
-      - name: bootstrap vcpkg
-        run: ./vcpkg/bootstrap-vcpkg.sh
+      - uses: docker/build-push-action@v2
+        with:
+          tags: native-build:latest
+          file: scripts/linux-build-env.Dockerfile
+          push: false
 
-      - name: create build container
-        run: |
-          cd linux
-          ./build-build-env.sh
+      - uses: addnab/docker-run-action@v3
+        with:
+          image: native-build:latest
+          run: python /work/scripts/linux.py
+          options: -v ${{ github.workspace }}:/work
 
-      - name: build vcpkg packages
-        run: |
-          cd linux
-          ./build-vcpkg.sh x64-linux-dynamic linux-x64
-
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: linux-x64
-          path: builds/linux-x64/*.so*
+          path: artifacts
+          if-no-files-found: error
+
+  win-x64:
+    runs-on: windows-2022
+    env:
+      VCPKG_DEFAULT_TRIPLET: x64-windows-release
+      VCPKG_DEFAULT_HOST_TRIPLET: x64-windows-release
+      VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install Deps
+        shell: cmd
+        run: choco install ninja --limit-output --no-progress
+
+      - name: Install VCPkg dependencies
+        uses: lukka/run-vcpkg@v11
+        with:
+          runVcpkgInstall: true
+          vcpkgJsonGlob: 'vcpkg.json'
+
+      - name: Build
+        shell: cmd
+        run: |
+          call "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\Common7\\Tools\\VsDevCmd.bat" -arch=x64 -host_arch=x64
+          python ./scripts/windows.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: win-x64
+          path: artifacts
+          if-no-files-found: error

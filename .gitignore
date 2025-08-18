@@ -1,3 +1,6 @@
 builds/
 build/
 .DS_Store
+artifacts
+__pycache__
+vcpkg_installed

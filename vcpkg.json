@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "name": "fluidsynth"
+    },
+    {
+      "name": "angle",
+      "platform": "windows"
+    }
+  ]
+}
