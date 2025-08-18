@@ -62,10 +62,11 @@ def software_output_get_name(output: SoftwareOutputLike) -> str:
 
 
 class Software(metaclass=ABCMeta):
-    def __init__(self, build_args: BuildArgs, name: str) -> None:
+    def __init__(self, build_args: BuildArgs, name: str, version: str) -> None:
         self.name = name
+        self.version = version
 
-        self.publish_dir = ARTIFACT_DIR.joinpath(self.name, build_args.rid)
+        self.publish_dir = ARTIFACT_DIR.joinpath(self.name, self.version, build_args.rid)
         if self.publish_dir.exists():
             shutil.rmtree(self.publish_dir)
         self.publish_dir.mkdir(exist_ok=True, parents=True)
@@ -99,8 +100,8 @@ def filter_software_to_build(software_available: Iterable[SoftwareImpl], build_a
 
 
 class SelfBuiltSoftware(Software):
-    def __init__(self, build_args: BuildArgs, name: str, dir: str) -> None:
-        super().__init__(build_args, name)
+    def __init__(self, build_args: BuildArgs, name: str, version: str, dir: str) -> None:
+        super().__init__(build_args, name, version)
 
         self.source_dir: Path = ROOT_DIR.joinpath(dir)
         self.dest_dir: Path = BUILD_DIR.joinpath(dir, build_args.rid)
@@ -128,7 +129,7 @@ class SelfBuiltSoftware(Software):
             copy_file_or_tree(output_path, new_path)
 
         dump_build_notes(
-            f"{self.name} (`{self.build_args}`)",
+            f"{self.name} [{self.version}] (`{self.build_args}`)",
             self.source_dir,
             self.publish_dir.joinpath("notes.md"),
             [f"- {SoftwareOutput.get_dst_name(output)}" for output in self.outputs[os]]

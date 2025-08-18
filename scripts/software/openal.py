@@ -8,7 +8,7 @@ from common.args import BuildArgs
 
 class OpenAL(CmakeSoftware):
     def __init__(self, args: BuildArgs) -> None:
-        super().__init__(args, "OpenAL-Soft", "openal-soft")
+        super().__init__(args, "OpenAL-Soft", "1.24.3", "openal-soft")
 
         self.outputs = {
             Platform.Windows: [

@@ -4,7 +4,7 @@ from common import VcpkgSoftware, Platform, BuildArgs
 
 class Fluidsynth(VcpkgSoftware):
     def __init__(self, args: BuildArgs) -> None:
-        super().__init__(args, "Fluidsynth")
+        super().__init__(args, "Fluidsynth", "2.4.6")
 
         self.outputs = {
             Platform.Windows: ["bin/libfluidsynth-3.dll", "bin/libfluidsynth-3.pdb"],

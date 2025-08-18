@@ -36,8 +36,8 @@ def get_vcpkg_host_triplet() -> str:
 
 
 class VcpkgSoftware(Software):
-    def __init__(self, build_args: BuildArgs, name: str) -> None:
-        super().__init__(build_args, name)
+    def __init__(self, build_args: BuildArgs, name: str, version: str) -> None:
+        super().__init__(build_args, name, version)
 
         self.vcpkg_installed_dir = VCPKG_INSTALLED_DIR / vcpkg_triplet_for_rid(build_args.rid)
 

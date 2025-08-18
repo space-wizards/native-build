@@ -9,7 +9,7 @@ from common.args import BuildArgs
 
 class Freetype(CmakeSoftware):
     def __init__(self, args: BuildArgs) -> None:
-        super().__init__(args, "Freetype", "freetype")
+        super().__init__(args, "Freetype", "2.13.3", "freetype")
 
         self.outputs = {
             Platform.Windows: [

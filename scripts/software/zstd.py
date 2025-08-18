@@ -9,7 +9,7 @@ from common.args import BuildArgs
 
 class ZStd(CmakeSoftware):
     def __init__(self, args: BuildArgs) -> None:
-        super().__init__(args, "zstd", "zstd")
+        super().__init__(args, "zstd", "1.5.7", "zstd")
 
         self.outputs = {
             Platform.Windows: [

@@ -9,7 +9,7 @@ from common.args import BuildArgs
 
 class GLFW(CmakeSoftware):
     def __init__(self, args: BuildArgs) -> None:
-        super().__init__(args, "GLFW", "glfw")
+        super().__init__(args, "GLFW", "3.4", "glfw")
 
         self.outputs = {
             Platform.Windows: [
