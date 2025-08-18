@@ -7,10 +7,6 @@
 [submodule "glfw"]
 	path = glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "fluidsynth"]
-	path = fluidsynth
-	url = https://github.com/FluidSynth/fluidsynth.git
-
 [submodule "vcpkg"]
 	path = vcpkg
 	url = https://github.com/microsoft/vcpkg.git
