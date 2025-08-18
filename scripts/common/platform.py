@@ -18,17 +18,17 @@ def get_host_rid() -> Rid:
 
     platform = _platform.system()
     if platform == "Windows":
-        if machine == "arm64":
+        if machine == "arm64" or machine == "aarch64":
             return RID_WIN_ARM64
         if machine == "AMD64" or machine == "x86_64":
             return RID_WIN_X64
     elif platform == "Linux":
-        if machine == "arm64":
+        if machine == "arm64" or machine == "aarch64":
             return RID_LINUX_ARM64
         if machine == "AMD64" or machine == "x86_64":
             return RID_LINUX_X64
     elif platform == "Darwin":
-        if machine == "arm64":
+        if machine == "arm64" or machine == "aarch64":
             return RID_OSX_ARM64
         if machine == "AMD64" or machine == "x86_64":
             return RID_OSX_X64
