@@ -12,6 +12,30 @@ RID_LINUX_X64 = Rid("linux-x64")
 RID_LINUX_ARM64 = Rid("linux-arm64")
 
 
+def get_host_rid() -> Rid:
+    platform = _platform.system()
+    machine = _platform.machine()
+
+    platform = _platform.system()
+    if platform == "Windows":
+        if machine == "arm64":
+            return RID_WIN_ARM64
+        if machine == "AMD64":
+            return RID_WIN_X64
+    elif platform == "Linux":
+        if machine == "arm64":
+            return RID_LINUX_ARM64
+        if machine == "AMD64":
+            return RID_LINUX_X64
+    elif platform == "Darwin":
+        if machine == "arm64":
+            return RID_OSX_ARM64
+        if machine == "AMD64":
+            return RID_OSX_X64
+
+    raise RuntimeError(f"Unknown platform {platform}")
+
+
 class Architecture(Enum):
     X64 = auto()
     Arm64 = auto()

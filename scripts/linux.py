@@ -12,12 +12,11 @@ from software.fluidsynth import Fluidsynth
 from common import Github, Software, dump_build_notes, filter_software_to_build, ARTIFACT_DIR, Platform, ROOT_DIR, SoftwareOutput
 from common.software import SoftwareImpl
 from common.args import parse_args
-from common.platform import RID_LINUX_X64
 
 import subprocess
 
 if __name__ == "__main__":
-    args = parse_args(RID_LINUX_X64)
+    args = parse_args()
 
     to_build: list[SoftwareImpl] = [
         ZStd,

@@ -2,14 +2,15 @@ import argparse
 from dataclasses import dataclass
 from typing import Optional
 
-from .platform import Rid
+from .platform import Rid, get_host_rid
 
 @dataclass
 class BuildArgs:
     rid: Rid
     software: Optional[set[str]]
 
-def parse_args(default_rid: Rid) -> BuildArgs:
+def parse_args(default_rid: Optional[Rid] = None) -> BuildArgs:
+    default_rid = default_rid or get_host_rid()
     parser = argparse.ArgumentParser()
     parser.add_argument("--rid", default=default_rid)
     parser.add_argument("--software", nargs="*")

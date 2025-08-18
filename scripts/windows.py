@@ -9,10 +9,9 @@ from software.freetype import Freetype
 from software.angle import Angle
 
 from common import Github, Software, SoftwareImpl, parse_args, dump_build_notes, filter_software_to_build,  ARTIFACT_DIR, ROOT_DIR
-from common.platform import RID_WIN_X64
 
 if __name__ == "__main__":
-    args = parse_args(RID_WIN_X64)
+    args = parse_args()
     to_build: list[SoftwareImpl] = [
         ZStd,
         GLFW,

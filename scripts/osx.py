@@ -14,10 +14,9 @@ from software.fluidsynth import Fluidsynth
 from common import Github, Platform, Software, filter_software_to_build, dump_build_notes, ARTIFACT_DIR, ROOT_DIR, SoftwareOutput
 from common.software import SoftwareImpl
 from common.args import parse_args
-from common.platform import RID_OSX_ARM64, RID_OSX_X64
 
 if __name__ == "__main__":
-    args = parse_args(RID_OSX_ARM64)
+    args = parse_args()
     to_build: list[SoftwareImpl] = [
         ZStd,
         GLFW,
