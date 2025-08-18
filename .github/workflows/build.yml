@@ -12,9 +12,6 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Install Deps
-        run: brew install ninja
-
       - name: Bootstrap vcpkg
         run: vcpkg/bootstrap-vcpkg.sh
 
@@ -37,9 +34,6 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
-
-      - name: Install Deps
-        run: brew install ninja
 
       - name: Bootstrap vcpkg
         run: vcpkg/bootstrap-vcpkg.sh
