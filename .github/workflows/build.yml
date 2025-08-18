@@ -19,7 +19,7 @@ jobs:
         run: vcpkg/bootstrap-vcpkg.sh
 
       - name: Vcpkg install
-        run: vcpkg/install --triplet=x64-osx
+        run: vcpkg/vcpkg install --triplet=x64-osx
 
       - name: Build
         run: python ./scripts/osx.py --rid osx-x64
@@ -45,7 +45,7 @@ jobs:
         run: vcpkg/bootstrap-vcpkg.sh
 
       - name: Vcpkg install
-        run: vcpkg/install --triplet=arm64-osx
+        run: vcpkg/vcpkg install --triplet=arm64-osx
 
       - name: Build
         run: python ./scripts/osx.py --rid osx-arm64
@@ -65,10 +65,10 @@ jobs:
           fetch-depth: 0
 
       - name: Build server environment
-        run: docker build -t build-env-server -t linux-build-env-server.Containerfile
+        run: docker build -t build-env-server -t linux-build-env-server.Containerfile .
 
       - name: Build client environment
-        run: docker build -t build-env-client -t linux-build-env-client.Containerfile
+        run: docker build -t build-env-client -t linux-build-env-client.Containerfile .
 
       - name: Run server build
         run: docker run --rm -v ${{ github.workspace }}:/work build-env-server /work/scripts/linux-server.py
@@ -91,10 +91,10 @@ jobs:
           fetch-depth: 0
 
       - name: Build server environment
-        run: docker build -t build-env-server -t linux-build-env-server.Containerfile
+        run: docker build -t build-env-server -t linux-build-env-server.Containerfile .
 
       - name: Build client environment
-        run: docker build -t build-env-client -t linux-build-env-client-arm64.Containerfile
+        run: docker build -t build-env-client -t linux-build-env-client-arm64.Containerfile .
 
       - name: Run server build
         run: docker run --rm -v ${{ github.workspace }}:/work build-env-server /work/scripts/linux-server.py
