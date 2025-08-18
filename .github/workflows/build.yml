@@ -5,7 +5,7 @@ on:
 
 jobs:
   osx-x64:
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v3
         with:
@@ -15,12 +15,44 @@ jobs:
       - name: Install Deps
         run: brew install ninja
 
+      - name: Bootstrap vcpkg
+        run: vcpkg/bootstrap-vcpkg.sh
+
+      - name: Vcpkg install
+        run: vcpkg/install --triplet=x64-osx
+
       - name: Build
-        run: python ./scripts/osx.py
+        run: python ./scripts/osx.py --rid osx-x64
 
       - uses: actions/upload-artifact@v4
         with:
           name: osx-x64
+          path: artifacts
+          if-no-files-found: error
+
+  osx-arm64:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install Deps
+        run: brew install ninja
+
+      - name: Bootstrap vcpkg
+        run: vcpkg/bootstrap-vcpkg.sh
+
+      - name: Vcpkg install
+        run: vcpkg/install --triplet=arm64-osx
+
+      - name: Build
+        run: python ./scripts/osx.py --rid osx-arm64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: osx-arm64
           path: artifacts
           if-no-files-found: error
 
@@ -32,17 +64,17 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - uses: docker/build-push-action@v2
-        with:
-          tags: native-build:latest
-          file: scripts/linux-build-env.Dockerfile
-          push: false
+      - name: Build server environment
+        run: docker build -t build-env-server -t linux-build-env-server.Containerfile
 
-      - uses: addnab/docker-run-action@v3
-        with:
-          image: native-build:latest
-          run: python /work/scripts/linux.py
-          options: -v ${{ github.workspace }}:/work
+      - name: Build client environment
+        run: docker build -t build-env-client -t linux-build-env-client.Containerfile
+
+      - name: Run server build
+        run: docker run --rm -v ${{ github.workspace }}:/work build-env-server /work/scripts/linux-server.py
+
+      - name: Run client build
+        run: docker run --rm -v ${{ github.workspace }}:/work build-env-client /work/scripts/linux-from-container.sh linux-x64 x64-linux
 
       - uses: actions/upload-artifact@v4
         with:
@@ -50,12 +82,34 @@ jobs:
           path: artifacts
           if-no-files-found: error
 
+  linux-arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Build server environment
+        run: docker build -t build-env-server -t linux-build-env-server.Containerfile
+
+      - name: Build client environment
+        run: docker build -t build-env-client -t linux-build-env-client-arm64.Containerfile
+
+      - name: Run server build
+        run: docker run --rm -v ${{ github.workspace }}:/work build-env-server /work/scripts/linux-server.py
+
+      - name: Run client build
+        run: docker run --rm -v ${{ github.workspace }}:/work build-env-client /work/scripts/linux-from-container.sh linux-arm64 arm64-linux
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-arm64
+          path: artifacts
+          if-no-files-found: error
+
   win-x64:
     runs-on: windows-2022
-    env:
-      VCPKG_DEFAULT_TRIPLET: x64-windows-release
-      VCPKG_DEFAULT_HOST_TRIPLET: x64-windows-release
-      VCPKG_INSTALLED_DIR: ${{ github.workspace }}/vcpkg_installed
 
     steps:
       - uses: actions/checkout@v3
@@ -67,20 +121,51 @@ jobs:
         shell: cmd
         run: choco install ninja --limit-output --no-progress
 
-      - name: Install VCPkg dependencies
-        uses: lukka/run-vcpkg@v11
-        with:
-          runVcpkgInstall: true
-          vcpkgJsonGlob: 'vcpkg.json'
+      - name: Bootstrap vcpkg
+        run: vcpkg/bootstrap-vcpkg.bat
+
+      - name: Vcpkg install
+        run: vcpkg/vcpkg.exe install --triplet=x64-windows
 
       - name: Build
         shell: cmd
         run: |
           call "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\Common7\\Tools\\VsDevCmd.bat" -arch=x64 -host_arch=x64
-          python ./scripts/windows.py
+          python ./scripts/windows.py --rid=win-x64
 
       - uses: actions/upload-artifact@v4
         with:
           name: win-x64
+          path: artifacts
+          if-no-files-found: error
+
+  win-arm64:
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install Deps
+        shell: cmd
+        run: choco install ninja --limit-output --no-progress
+
+      - name: Bootstrap vcpkg
+        run: vcpkg/bootstrap-vcpkg.bat
+
+      - name: Vcpkg install
+        run: vcpkg/vcpkg.exe install --triplet=arm64-windows
+
+      - name: Build
+        shell: cmd
+        run: |
+          call "C:\\Program Files\\Microsoft Visual Studio\\2022\\Enterprise\\Common7\\Tools\\VsDevCmd.bat" -arch=arm64 -host_arch=x64
+          python ./scripts/windows.py --rid=win-arm64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: win-arm64
           path: artifacts
           if-no-files-found: error
