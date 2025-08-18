@@ -5,7 +5,7 @@ from pathlib import Path
 
 from . import platform as p
 from .args import BuildArgs
-from .software import Software
+from .software import Software, SoftwareOutput
 from .platform import Platform, Rid
 from .github import Github
 from .paths import VCPKG_INSTALLED_DIR, ROOT_DIR
@@ -73,7 +73,7 @@ class VcpkgSoftware(Software):
 
         for output in self.outputs[os]:
             output_path = self.vcpkg_installed_dir.joinpath(
-                output
+                SoftwareOutput.get_src(output)
             ).resolve()  # Ensure we have resolved symlinks
             if not output_path.exists():
                 Github.bail(f"Failed to find vcpkg output [{output_path}]")
@@ -81,7 +81,7 @@ class VcpkgSoftware(Software):
 
             # Since output_path might have changed (due to symlinks), re-use the expected
             # output name here
-            new_path = self.publish_dir.joinpath(Path(output).name)
+            new_path = self.publish_dir / SoftwareOutput.get_dst_name(output)
             Github.log(f"[{output_path}] => [{new_path}]")
             copy_file_or_tree(output_path, new_path)
 
@@ -89,6 +89,6 @@ class VcpkgSoftware(Software):
             f"{self.name} (`{self.build_args}`)",
             ROOT_DIR,
             self.publish_dir.joinpath("notes.md"),
-            [f"- {self.vcpkg_installed_dir.joinpath(output).name}" for output in self.outputs[os]]
+            [f"- {SoftwareOutput.get_dst_name(output)}" for output in self.outputs[os]]
         )
 
