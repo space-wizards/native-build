@@ -4,6 +4,7 @@ import errno
 import os
 
 from pathlib import Path
+from typing import Union
 
 from .github import Github
 
@@ -36,7 +37,7 @@ Contains:
         pass
 
 
-StrPath = str | os.PathLike
+StrPath = Union[str, os.PathLike]
 
 # https://stackoverflow.com/a/1994840
 def copy_file_or_tree(src: StrPath, dst: StrPath):

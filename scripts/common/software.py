@@ -2,7 +2,7 @@ import shutil
 from dataclasses import dataclass
 from abc import abstractmethod, ABCMeta
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import Callable, Iterable, Union
 
 from .platform import Platform
 from .github import Github
@@ -38,7 +38,7 @@ class SoftwareOutput:
         return Path(SoftwareOutput.get_dst(self)).name
 
 
-SoftwareOutputLike = str | SoftwareOutput
+SoftwareOutputLike = Union[str, SoftwareOutput]
 
 
 def software_output_get_src(output: SoftwareOutputLike) -> str:
