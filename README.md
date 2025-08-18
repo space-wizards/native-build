@@ -1,6 +1,6 @@
 # SS14 Native-Build
 
-A collection of submodules providing dependencies for building [Space Station 14](https://github.com/space-wizards/space-station-14) and [Space Station 14](https://github.com/space-wizards/RobustToolbox).
+A collection of submodules providing dependencies for building [Space Station 14](https://github.com/space-wizards/space-station-14) and [RobustToolbox](https://github.com/space-wizards/RobustToolbox).
 
 Building is handled through the `Build Natives` workflow action and relies on Github's runners to perform the actual compilation.
 Local building is possible by running your platform's python file under the [scripts](./scripts/) directory.
