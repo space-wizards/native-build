@@ -33,6 +33,7 @@ class GLFW(CmakeSoftware):
                 "-DGLFW_BUILD_TESTS=Off",
                 "-DGLFW_BUILD_DOCS=Off",
                 "-DGLFW_INSTALL=Off",
+                "-DGLFW_BUILD_WAYLAND=Off",
             ] + cmake_common_args(self.build_args),
             text=True,
             cwd=self.source_dir,
