@@ -5,3 +5,6 @@ insert_final_newline = true
 
 [*.sh]
 end_of_line = lf
+
+[*.patch]
+end_of_line = lf

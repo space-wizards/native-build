@@ -73,10 +73,16 @@ file(COPY "${CMAKE_CURRENT_LIST_DIR}/unofficial-angle-config.cmake" DESTINATION 
 set(ANGLE_WEBKIT_BUILDSYSTEM_COMMIT "0742522b24152262b04913242cb0b3c48de92ba0")
 
 # Download WebKit gni-to-cmake.py conversion script
-vcpkg_download_distfile(GNI_TO_CMAKE_PY
-    URLS "https://github.com/WebKit/WebKit/raw/${ANGLE_WEBKIT_BUILDSYSTEM_COMMIT}/Source/ThirdParty/ANGLE/gni-to-cmake.py"
-    FILENAME "gni-to-cmake.py"
-    SHA512 cf9dab1b59cd44b9ce05a2dc4636115e770dfe7d5cfbd90c3fef659628ac8155c57b866480f7cfe9a0afeb31ff5ce5eed74473f386120a7fc5910e8b032bd61d
+#vcpkg_download_distfile(GNI_TO_CMAKE_PY
+#    URLS "https://github.com/WebKit/WebKit/raw/${ANGLE_WEBKIT_BUILDSYSTEM_COMMIT}/Source/ThirdParty/ANGLE/gni-to-cmake.py"
+#    FILENAME "gni-to-cmake.py"
+#    SHA512 cf9dab1b59cd44b9ce05a2dc4636115e770dfe7d5cfbd90c3fef659628ac8155c57b866480f7cfe9a0afeb31ff5ce5eed74473f386120a7fc5910e8b032bd61d
+#)
+
+set(I_HATE_CMAKE "gni-to-cmake.py")
+cmake_path(ABSOLUTE_PATH I_HATE_CMAKE
+    BASE_DIRECTORY "${CURRENT_PORT_DIR}"
+    OUTPUT_VARIABLE GNI_TO_CMAKE_PY
 )
 
 # Generate CMake files from GN / GNI files
