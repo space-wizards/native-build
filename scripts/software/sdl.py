@@ -9,7 +9,7 @@ from common.args import BuildArgs
 
 class SDL(CmakeSoftware):
     def __init__(self, build_args: BuildArgs) -> None:
-        super().__init__(build_args, "SDL", "3.2.20", "SDL")
+        super().__init__(build_args, "SDL", "3.4.0", "SDL")
 
         self.outputs = {
             Platform.Windows: [
