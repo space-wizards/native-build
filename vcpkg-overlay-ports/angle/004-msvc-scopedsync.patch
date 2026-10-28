@@ -1,0 +1,19 @@
+--- a/src/libANGLE/validationEGL.cpp
++++ b/src/libANGLE/validationEGL.cpp
+@@ -2938,9 +2938,12 @@
+ ScopedSyncDestroy RemoveSyncIfValid(ThreadSafeDisplay *display, SyncID syncID)
+ {
+     // display->removeSync() - validates syncID
+-    return ValidateDisplay(nullptr, display)
+-               ? ScopedSyncDestroy(display, display->removeSync(syncID))
+-               : ScopedSyncDestroy();
++    // MSVC cannot elide the copy through a conditional operator for a non-copyable type so it throws a stink.
++    // I couldn't find a clean way to ignore it, so new patch it is.
++    if (ValidateDisplay(nullptr, display))
++    {
++        return ScopedSyncDestroy(display, display->removeSync(syncID));
++    }
++    return ScopedSyncDestroy();
+ }
+ 
+ const LabeledObject *GetLabeledObjectIfValid(Thread *thread,

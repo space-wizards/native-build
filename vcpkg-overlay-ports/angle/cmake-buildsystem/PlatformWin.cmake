@@ -28,12 +28,7 @@ list(APPEND ANGLE_DEFINITIONS
 # https://issues.angleproject.org/issues/345274916
 list(APPEND ANGLEGLESv2_LIBRARIES dxguid dxgi synchronization)
 
-if(NOT angle_is_winuwp) # vcpkg EDIT: Exclude DirectX 9 on UWP
-    # DirectX 9 support should be optional but ANGLE will not compile without it
-    list(APPEND ANGLE_SOURCES ${d3d9_backend_sources})
-    list(APPEND ANGLE_DEFINITIONS ANGLE_ENABLE_D3D9)
-    list(APPEND ANGLEGLESv2_LIBRARIES d3d9)
-endif()
+# DirectX 9 backend was removed upstream in ANGLE chromium/8129
 
 # VCPKG EDITS:
 
