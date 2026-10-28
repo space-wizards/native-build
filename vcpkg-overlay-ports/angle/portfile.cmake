@@ -35,11 +35,11 @@ if ("metal" IN_LIST FEATURES)
   set(USE_METAL ON)
 endif()
 
-# chromium/7258
-set(ANGLE_COMMIT 020c8ea3571f7b2084ef9a57c9e41b80fcc3f630)
-set(ANGLE_VERSION 7440)
-set(ANGLE_SHA512 6f1e9c2ff697c0ae22f46e80e79274ad67efb6038057e4242dc19aae45eca3394169f16d9ff5ebfa012cb312a00e7964f86923af791c439e509555e2ce13e183)
-set(ANGLE_THIRDPARTY_ZLIB_COMMIT 4028ebf8710ee39d2286cb0f847f9b95c59f84d8)
+# chromium/8129
+set(ANGLE_COMMIT b0d01b2554092b37d7cbd6fa2dc26043c8b8575d)
+set(ANGLE_VERSION 8129)
+set(ANGLE_SHA512 4fc099b5798ff2976fc277a8dca13e3ee76059a1a72b2cf5cc61c7e93c5b620021eac8434a5eab18ced0ee21f52186958bd0c244ada49ac6e89b9a52c60bdc66)
+set(ANGLE_THIRDPARTY_ZLIB_COMMIT 9f9f52c60a14e8e772fb561029ae0a121fef7609)
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
@@ -49,6 +49,7 @@ vcpkg_from_github(
     # On update check headers against opengl-registry
     PATCHES
         001-fix-builder-error.patch
+        004-msvc-scopedsync.patch
 )
 
 # Generate angle_commit.h
@@ -164,6 +165,8 @@ vcpkg_cmake_configure(
         "-DANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW=${ANGLE_USE_D3D11_COMPOSITOR_NATIVE_WINDOW}"
         "-DVCPKG_TARGET_IS_WINDOWS=${VCPKG_TARGET_IS_WINDOWS}"
         "-DUSE_METAL=${USE_METAL}"
+    MAYBE_UNUSED_VARIABLES
+        DISABLE_INSTALL_HEADERS
 )
 
 vcpkg_cmake_install()

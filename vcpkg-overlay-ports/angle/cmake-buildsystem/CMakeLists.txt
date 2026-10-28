@@ -16,7 +16,7 @@ if(MSVC)
     add_link_options(/guard:cf)
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -100,9 +100,6 @@ elseif (WIN32)
         set(angle_is_winuwp TRUE)
         set(target_os "winuwp")
     endif()
-    if (NOT angle_is_winuwp)
-        set(angle_enable_d3d9 TRUE)
-    endif()
     set(angle_enable_d3d11 TRUE)
 elseif (UNIX)
     set(is_linux TRUE)
@@ -160,7 +157,7 @@ set(ANGLE_PRIVATE_INCLUDE_DIRECTORIES
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/common/third_party/base"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/common/base"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/common/third_party/xxhash"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/common/third_party/xxhash/src"
     "${CMAKE_CURRENT_SOURCE_DIR}/third_party/zlib/google"
     "${CMAKE_CURRENT_BINARY_DIR}/include"
 )
@@ -208,12 +205,6 @@ if (WIN32)
         "src/libANGLE/renderer/dxgi_support_table.h"
         "src/libANGLE/renderer/dxgi_support_table_autogen.cpp"
     )
-    if (NOT angle_is_winuwp)
-        list(APPEND ANGLE_SOURCES
-            "src/libANGLE/renderer/d3d_format.cpp"
-            "src/libANGLE/renderer/d3d_format.h"
-        )
-    endif()
 endif ()
 
 set(ANGLEGLESv2_LIBRARIES
