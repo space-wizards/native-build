@@ -40,7 +40,7 @@ class OpenAL(CmakeSoftware):
             Github.bail("Failed to setup CMake")
 
         Github.log("Building up CMake...")
-        subprocess.call(
+        result = subprocess.call(
             [
                 cmake,
                 "--build",
