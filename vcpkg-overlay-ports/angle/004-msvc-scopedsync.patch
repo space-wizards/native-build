@@ -1,6 +1,6 @@
 --- a/src/libANGLE/validationEGL.cpp
 +++ b/src/libANGLE/validationEGL.cpp
-@@ -2938,9 +2938,12 @@
+@@ -2938,9 +2938,13 @@
  ScopedSyncDestroy RemoveSyncIfValid(ThreadSafeDisplay *display, SyncID syncID)
  {
      // display->removeSync() - validates syncID
